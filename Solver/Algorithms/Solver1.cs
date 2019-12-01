@@ -8,7 +8,7 @@ namespace Solver.Algorithms
 	{
 		public int Solve(Day1 input)
 		{
-			return input.Data.GetFlat().Select(c => (int)(c / 3) - 2).Sum(c => c);
+			return input.Data.GetFlat().Select(c => c / 3 - 2).Sum(c => c);
 		}
 	}
 }

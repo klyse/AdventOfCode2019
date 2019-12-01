@@ -1,5 +1,4 @@
-﻿using System.Linq;
-using NeoMatrix;
+﻿using NeoMatrix;
 using Solver.Base;
 
 namespace Solver.Model
