@@ -2,6 +2,7 @@
 {
 	public interface ISolver<out TOutput, in TInput>
 	{
-		TOutput Solve(TInput input);
+		TOutput Star1(TInput input);
+		TOutput Star2(TInput input);
 	}
 }
