@@ -6,15 +6,24 @@ using Solver.Model;
 
 namespace Test
 {
-	public class Solver1Test
+	public class Day1Test
 	{
+		private const string File = "day1";
+		private Day1Solver _solver;
+
+		[SetUp]
+		public void SetUp()
+		{
+			_solver = new Day1Solver();
+		}
+
 		[Test]
 		public void Example1()
 		{
 			var inputStr = new[] { "12" };
-			var input = new Day1().Parse(inputStr);
+			var input = new Day1Input().Parse(inputStr);
 
-			var solution = new Solver1().Solve(input);
+			var solution = _solver.Star1(input);
 
 			Console.WriteLine(solution);
 			Assert.AreEqual(2, solution);
@@ -24,24 +33,22 @@ namespace Test
 		public void Example2()
 		{
 			var inputStr = new[] { "14" };
-			var input = new Day1().Parse(inputStr);
+			var input = new Day1Input().Parse(inputStr);
 
-			var solution = new Solver1().Solve(input);
+			var solution = _solver.Star1(input);
 
 			Console.WriteLine(solution);
 			Assert.AreEqual(2, solution);
 		}
 
 		[Test]
-		[TestCase("day1.txt")]
-		public void Star1(string file)
+		public void Star1()
 		{
-			var fileInput = file.Read();
-			var input = new Day1().Parse(fileInput);
+			var fileInput = File.Read();
+			var input = new Day1Input().Parse(fileInput);
 
-			var solution = new Solver1().Solve(input);
+			var solution = _solver.Star1(input);
 
-			(file + "Star1").Write(solution.ToString());
 			Console.WriteLine(solution);
 			Assert.AreEqual(3212842, solution);
 		}
@@ -50,9 +57,9 @@ namespace Test
 		public void Example3()
 		{
 			var inputStr = new[] { "14" };
-			var input = new Day1().Parse(inputStr);
+			var input = new Day1Input().Parse(inputStr);
 
-			var solution = new Solver1Star2().Solve(input);
+			var solution = _solver.Star2(input);
 
 			Console.WriteLine(solution);
 			Assert.AreEqual(2, solution);
@@ -62,9 +69,9 @@ namespace Test
 		public void Example4()
 		{
 			var inputStr = new[] { "1969" };
-			var input = new Day1().Parse(inputStr);
+			var input = new Day1Input().Parse(inputStr);
 
-			var solution = new Solver1Star2().Solve(input);
+			var solution = _solver.Star2(input);
 
 			Console.WriteLine(solution);
 			Assert.AreEqual(966, solution);
@@ -74,9 +81,9 @@ namespace Test
 		public void Example5()
 		{
 			var inputStr = new[] { "100756" };
-			var input = new Day1().Parse(inputStr);
+			var input = new Day1Input().Parse(inputStr);
 
-			var solution = new Solver1Star2().Solve(input);
+			var solution = _solver.Star2(input);
 
 			Console.WriteLine(solution);
 			Assert.AreEqual(50346, solution);
@@ -86,24 +93,22 @@ namespace Test
 		public void Test1()
 		{
 			var inputStr = new[] { "100756", "1969" };
-			var input = new Day1().Parse(inputStr);
+			var input = new Day1Input().Parse(inputStr);
 
-			var solution = new Solver1Star2().Solve(input);
+			var solution = _solver.Star2(input);
 
 			Console.WriteLine(solution);
 			Assert.AreEqual(50346 + 966, solution);
 		}
 
 		[Test]
-		[TestCase("day1.txt")]
-		public void Star2(string file)
+		public void Star2()
 		{
-			var fileInput = file.Read();
-			var input = new Day1().Parse(fileInput);
+			var fileInput = File.Read();
+			var input = new Day1Input().Parse(fileInput);
 
-			var solution = new Solver1Star2().Solve(input);
+			var solution = _solver.Star2(input);
 
-			(file + "Star2").Write(solution.ToString());
 			Console.WriteLine(solution);
 			Assert.AreEqual(4816402, solution);
 		}
