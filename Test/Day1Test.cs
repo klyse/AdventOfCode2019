@@ -8,7 +8,7 @@ namespace Test
 {
 	public class Day1Test
 	{
-		private const string File = "day1";
+		private const string File = "day1.txt";
 		private Day1Solver _solver;
 
 		[SetUp]
