@@ -44,44 +44,7 @@ namespace Test
 			var solution = _solver.Star1(input);
 
 			Console.WriteLine(solution);
-			Assert.Pass();
-			Assert.AreEqual(3212842, solution);
-		}
-
-		[Test]
-		public void Example5()
-		{
-			var inputStr = new[] { "14" };
-			var input = new Day2Input().Parse(inputStr);
-
-			var solution = _solver.Star2(input);
-
-			Console.WriteLine(solution);
-			Assert.AreEqual(2, solution);
-		}
-
-		[Test]
-		public void Example6()
-		{
-			var inputStr = new[] { "1969" };
-			var input = new Day2Input().Parse(inputStr);
-
-			var solution = _solver.Star2(input);
-
-			Console.WriteLine(solution);
-			Assert.AreEqual(966, solution);
-		}
-
-		[Test]
-		public void Example7()
-		{
-			var inputStr = new[] { "100756" };
-			var input = new Day2Input().Parse(inputStr);
-
-			var solution = _solver.Star2(input);
-
-			Console.WriteLine(solution);
-			Assert.AreEqual(50346, solution);
+			Assert.AreEqual(4090689, solution);
 		}
 
 		[Test]
@@ -93,7 +56,8 @@ namespace Test
 			var solution = _solver.Star2(input);
 
 			Console.WriteLine(solution);
-			Assert.AreEqual(4816402, solution);
+			Assert.Pass();
+			Assert.AreEqual(7733, solution);
 		}
 	}
 }

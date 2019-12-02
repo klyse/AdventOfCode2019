@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Diagnostics;
 using Solver.Base;
 using Solver.Model;
 
@@ -27,8 +26,7 @@ namespace Solver.Algorithms
 				else if (command == 2)
 					val = v1 * v2;
 				else
-					// something went wrong
-					Debugger.Break();
+					return -1;
 
 				cursor += 4;
 
@@ -38,7 +36,31 @@ namespace Solver.Algorithms
 
 		public int Star2(Day2Input input)
 		{
-			throw new NotImplementedException();
+			for (var i = 0; i <= 99; i++)
+			for (var j = 0; j <= 99; j++)
+			{
+				var command = (int[])input.Commands.Clone();
+				command[1] = i;
+				command[2] = j;
+
+				var val = -1;
+				try
+				{
+					val = Star1(new Day2Input
+								{
+									Commands = command
+								});
+				}
+				catch (Exception)
+				{
+					Console.WriteLine("ex");
+				}
+
+				if (val == 19690720)
+					return i * 100 + j;
+			}
+
+			throw new Exception("Not found");
 		}
 	}
 }
