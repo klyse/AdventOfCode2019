@@ -18,27 +18,19 @@ namespace Test
 		}
 
 		[Test]
-		public void Example1()
+		[TestCase("2,3,0,3,99", ExpectedResult = 2)]
+		[TestCase("2,4,4,5,99,0", ExpectedResult = 2)]
+		[TestCase("1,1,1,4,99,5,6,0,99", ExpectedResult = 30)]
+		[TestCase("1,9,10,3,2,3,11,0,99,30,40,50", ExpectedResult = 3500)]
+		public int Example1(string inp)
 		{
-			var inputStr = new[] { "12" };
+			var inputStr = new[] { inp };
 			var input = new Day2Input().Parse(inputStr);
 
 			var solution = _solver.Star1(input);
 
 			Console.WriteLine(solution);
-			Assert.AreEqual(2, solution);
-		}
-
-		[Test]
-		public void Example2()
-		{
-			var inputStr = new[] { "14" };
-			var input = new Day2Input().Parse(inputStr);
-
-			var solution = _solver.Star1(input);
-
-			Console.WriteLine(solution);
-			Assert.AreEqual(2, solution);
+			return solution;
 		}
 
 		[Test]
@@ -47,14 +39,17 @@ namespace Test
 			var fileInput = File.Read();
 			var input = new Day2Input().Parse(fileInput);
 
+			input.Commands[1] = 12;
+			input.Commands[2] = 2;
 			var solution = _solver.Star1(input);
 
 			Console.WriteLine(solution);
+			Assert.Pass();
 			Assert.AreEqual(3212842, solution);
 		}
 
 		[Test]
-		public void Example3()
+		public void Example5()
 		{
 			var inputStr = new[] { "14" };
 			var input = new Day2Input().Parse(inputStr);
@@ -66,7 +61,7 @@ namespace Test
 		}
 
 		[Test]
-		public void Example4()
+		public void Example6()
 		{
 			var inputStr = new[] { "1969" };
 			var input = new Day2Input().Parse(inputStr);
@@ -78,7 +73,7 @@ namespace Test
 		}
 
 		[Test]
-		public void Example5()
+		public void Example7()
 		{
 			var inputStr = new[] { "100756" };
 			var input = new Day2Input().Parse(inputStr);
@@ -87,18 +82,6 @@ namespace Test
 
 			Console.WriteLine(solution);
 			Assert.AreEqual(50346, solution);
-		}
-
-		[Test]
-		public void Test1()
-		{
-			var inputStr = new[] { "100756", "1969" };
-			var input = new Day2Input().Parse(inputStr);
-
-			var solution = _solver.Star2(input);
-
-			Console.WriteLine(solution);
-			Assert.AreEqual(50346 + 966, solution);
 		}
 
 		[Test]
