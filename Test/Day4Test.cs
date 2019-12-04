@@ -1,6 +1,5 @@
 using System;
 using NUnit.Framework;
-using Solver;
 using Solver.Algorithms;
 using Solver.Model;
 
@@ -46,13 +45,13 @@ namespace Test
 		}
 
 		[Test]
-		[TestCase("", ExpectedResult = 0)]
-		public int Example2(string inp1)
+		[TestCase(112233, ExpectedResult = true)]
+		[TestCase(111122, ExpectedResult = true)]
+		[TestCase(123444, ExpectedResult = false)]
+		[TestCase(347777, ExpectedResult = false)]
+		public bool Example2(int inp1)
 		{
-			var inputStr = new[] { inp1 };
-			var input = _input.Parse(inputStr);
-
-			var solution = _solver.Star2(input);
+			var solution = _solver.ValidNumber2(inp1);
 
 			Console.WriteLine(solution);
 			return solution;
@@ -67,7 +66,7 @@ namespace Test
 			var solution = _solver.Star2(input);
 
 			Console.WriteLine(solution);
-			Assert.AreEqual(9240, solution);
+			Assert.AreEqual(364, solution);
 		}
 	}
 }
