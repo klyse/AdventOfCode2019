@@ -56,7 +56,7 @@ namespace Solver.Algorithms
 				var v2 = param[1] == '0' ? input.Commands[input.Commands[cursor + 2]] : input.Commands[cursor + 2];
 				var pos = input.Commands[cursor + 3];
 
-				var val = 0;
+				int val;
 				if (cleanCommand == 1)
 					val = v1 + v2;
 				else if (cleanCommand == 2)
@@ -124,7 +124,7 @@ namespace Solver.Algorithms
 				if (pos == cursor)
 					throw new Exception("Cursor is equal to position");
 
-				var val = 0;
+				int val;
 				if (cleanCommand == 1)
 				{
 					val = v1 + v2;
