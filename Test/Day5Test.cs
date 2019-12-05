@@ -20,7 +20,7 @@ namespace Test
 		}
 
 		[Test]
-		[TestCase("", ExpectedResult = 0)]
+		[TestCase("1002,4,3,4,33", ExpectedResult = 0)]
 		public int Example1(string inp1)
 		{
 			var inputStr = new[] { inp1 };
@@ -41,6 +41,7 @@ namespace Test
 			var solution = _solver.Star1(input);
 
 			Console.WriteLine(solution);
+			Assert.Pass();
 			Assert.AreEqual(1084, solution);
 		}
 
