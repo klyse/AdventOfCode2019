@@ -13,11 +13,10 @@ namespace Solver.Algorithms
 			var inputCommand = 1;
 			var cursor = 0;
 			var output = -1;
-			var inputArray = input.Commands;
 
 			while (true)
 			{
-				var command = inputArray[cursor];
+				var command = input.Commands[cursor];
 
 				var cleanCommand = command;
 				if (command > 10000)
@@ -31,14 +30,14 @@ namespace Solver.Algorithms
 
 				if (cleanCommand == 3)
 				{
-					inputArray[inputArray[cursor + 1]] = inputCommand;
+					input.Commands[input.Commands[cursor + 1]] = inputCommand;
 					cursor += 2;
 					continue;
 				}
 
 				if (cleanCommand == 4)
 				{
-					output = inputArray[inputArray[cursor + 1]];
+					output = input.Commands[input.Commands[cursor + 1]];
 					Console.WriteLine(output);
 					cursor += 2;
 					continue;
@@ -50,18 +49,18 @@ namespace Solver.Algorithms
 				if (param.Count < 2)
 					param.Add('0');
 
-				//var reqPos1 = inputArray[cursor + 1];
-				//var reqPos2 = inputArray[cursor + 2];
+				//var reqPos1 = input.Commands[cursor + 1];
+				//var reqPos2 = input.Commands[cursor + 2];
 				//var maxPos = Math.Max(reqPos2, reqPos1);
-				//if (maxPos > inputArray.Length)
+				//if (maxPos > input.Commands.Length)
 				//{
-				//	var delta = maxPos - inputArray.Length;
-				//	Array.Resize(ref inputArray, inputArray.Length + delta);
+				//	var delta = maxPos - input.Commands.Length;
+				//	Array.Resize(ref input.Commands, input.Commands.Length + delta);
 				//}
 
-				var v1 = param[0] == '0' ? inputArray[inputArray[cursor + 1]] : inputArray[cursor + 1];
-				var v2 = param[1] == '0' ? inputArray[inputArray[cursor + 2]] : inputArray[cursor + 2];
-				var pos = inputArray[cursor + 3];
+				var v1 = param[0] == '0' ? input.Commands[input.Commands[cursor + 1]] : input.Commands[cursor + 1];
+				var v2 = param[1] == '0' ? input.Commands[input.Commands[cursor + 2]] : input.Commands[cursor + 2];
+				var pos = input.Commands[cursor + 3];
 
 				var val = 0;
 				if (cleanCommand == 1)
@@ -74,9 +73,9 @@ namespace Solver.Algorithms
 				cursor += 4;
 
 				if (pos < 0)
-					pos = inputArray.Length + pos;
+					pos = input.Commands.Length + pos;
 
-				inputArray[pos] = val;
+				input.Commands[pos] = val;
 			}
 		}
 
