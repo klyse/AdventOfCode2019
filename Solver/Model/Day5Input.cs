@@ -5,6 +5,7 @@ namespace Solver.Model
 {
 	public class Day5Input : IInput<Day5Input>
 	{
+		public int Input { get; set; }
 		public int[] Commands { get; set; }
 
 		public Day5Input Parse(string[] values)
