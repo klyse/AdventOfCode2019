@@ -33,7 +33,6 @@ namespace Solver.Algorithms
 
 		public int Star2(Day6Input input)
 		{
-			var totalCnt = 0;
 			var mePassedStars = new List<string>();
 			var santaPassedStars = new List<string>();
 
