@@ -20,16 +20,28 @@ namespace Test
 		}
 
 		[Test]
-		[TestCase("", ExpectedResult = 1)]
-		public int Example1(string inp1)
+		public void Example1()
 		{
-			var inputStr = new[] { inp1 };
+			var inputStr = new[]
+						   {
+							   "COM)B",
+							   "B)C",
+							   "C)D",
+							   "D)E",
+							   "E)F",
+							   "B)G",
+							   "G)H",
+							   "D)I",
+							   "E)J",
+							   "J)K",
+							   "K)L"
+						   };
 			var input = _input.Parse(inputStr);
 
-			var solution = _solver.Star2(input);
+			var solution = _solver.Star1(input);
 
 			Console.WriteLine(solution);
-			return solution;
+			Assert.AreEqual(42, solution);
 		}
 
 		[Test]
@@ -40,6 +52,7 @@ namespace Test
 			var solution = _solver.Star1(input);
 
 			Console.WriteLine(solution);
+			Assert.Pass();
 			Assert.AreEqual(9938601, solution);
 		}
 
