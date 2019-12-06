@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Solver.Base;
 using Solver.Model;
@@ -32,7 +33,40 @@ namespace Solver.Algorithms
 
 		public int Star2(Day6Input input)
 		{
-			throw new NotImplementedException();
+			var totalCnt = 0;
+			var mePassedStars = new List<string>();
+			var santaPassedStars = new List<string>();
+
+			var me = input.Orbits.First(c => c.Child == "YOU");
+			mePassedStars.Add(me.Parent);
+			var currentOrbit = me;
+			while (true)
+			{
+				currentOrbit = input.Orbits.FirstOrDefault(c => c.Child == currentOrbit.Parent);
+
+				if (currentOrbit is null) break;
+
+				mePassedStars.Add(currentOrbit.Parent);
+			}
+
+			var santa = input.Orbits.First(c => c.Child == "SAN");
+			santaPassedStars.Add(santa.Parent);
+			currentOrbit = santa;
+			while (true)
+			{
+				currentOrbit = input.Orbits.FirstOrDefault(c => c.Child == currentOrbit.Parent);
+
+				if (currentOrbit is null) break;
+
+				santaPassedStars.Add(currentOrbit.Parent);
+			}
+
+			for (var i = 0; i < mePassedStars.Count; i++)
+			for (var j = 0; j < santaPassedStars.Count; j++)
+				if (mePassedStars[i] == santaPassedStars[j])
+					return i + j;
+
+			throw new Exception("Strange things happened!");
 		}
 	}
 }

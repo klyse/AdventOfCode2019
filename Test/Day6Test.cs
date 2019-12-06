@@ -57,16 +57,30 @@ namespace Test
 		}
 
 		[Test]
-		[TestCase("", ExpectedResult = 1)]
-		public int Example2(string inp1)
+		public void Example2()
 		{
-			var inputStr = new[] { inp1 };
+			var inputStr = new[]
+						   {
+							   "COM)B",
+							   "B)C",
+							   "C)D",
+							   "D)E",
+							   "E)F",
+							   "B)G",
+							   "G)H",
+							   "D)I",
+							   "E)J",
+							   "J)K",
+							   "K)L",
+							   "K)YOU",
+							   "I)SAN"
+						   };
 			var input = _input.Parse(inputStr);
 
 			var solution = _solver.Star2(input);
 
 			Console.WriteLine(solution);
-			return solution;
+			Assert.AreEqual(4, solution);
 		}
 
 		[Test]
@@ -77,8 +91,7 @@ namespace Test
 			var solution = _solver.Star2(input);
 
 			Console.WriteLine(solution);
-			Assert.Pass();
-			Assert.AreEqual(9240, solution);
+			Assert.AreEqual(475, solution);
 		}
 	}
 }
