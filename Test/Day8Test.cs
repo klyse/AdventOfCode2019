@@ -20,8 +20,8 @@ namespace Test
 		}
 
 		[Test]
-		[TestCase("123456789012", ExpectedResult = 0)]
-		public int Example1(string inp1)
+		[TestCase("123456789012")]
+		public void Example1(string inp1)
 		{
 			var inputStr = new[] { inp1, "2", "3" };
 			var input = _input.Parse(inputStr);
@@ -29,7 +29,7 @@ namespace Test
 			var solution = _solver.Star1(input);
 
 			Console.WriteLine(solution);
-			return solution;
+			Assert.Pass();
 		}
 
 		[Test]
@@ -40,34 +40,19 @@ namespace Test
 			var solution = _solver.Star1(input);
 
 			Console.WriteLine(solution);
-			Assert.Pass();
-			Assert.AreEqual(199988, solution);
-		}
-
-		[Test]
-		[TestCase("", ExpectedResult = 0)]
-		public int Example2(string inp1)
-		{
-			var inputStr = new[] { inp1 };
-			var input = _input.Parse(inputStr);
-
-			var solution = _solver.Star2(input);
-
-			Console.WriteLine(solution);
-			return solution;
+			Assert.AreEqual("1620", solution);
 		}
 
 		[Test]
 		public void Star2()
 		{
 			var fileInput = File.Read();
-			var input = _input.Parse(fileInput);
+			var input = _input.Parse(new[] { fileInput[0], "6", "25" });
 
 			var solution = _solver.Star2(input);
 
 			Console.WriteLine(solution);
-			Assert.Pass();
-			Assert.AreEqual(9240, solution);
+			Assert.AreEqual("BCYEF", solution);
 		}
 	}
 }
