@@ -2,8 +2,10 @@
 using Solver.Base;
 using Solver.Model;
 
-namespace Solver.Algorithms {
-	public class Day9Solver : ISolver<int, Day9Input> {
+namespace Solver.Algorithms
+{
+	public class Day9Solver : ISolver<int, Day9Input>
+	{
 		public int Star1(Day9Input input)
 		{
 			throw new NotImplementedException();

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Drawing;
 using System.IO;
 using System.Linq;
 using NeoMatrix;
@@ -80,13 +79,8 @@ namespace Solver.Algorithms
 																			   throw new Exception("Something strange happened");
 																		   });
 
-			var bitmap = new Bitmap(input.Columns, input.Rows);
-			for (var i = 0; i < input.Rows; i++)
-			for (var j = 0; j < input.Columns; j++)
-				if (picture[i, j] == 0)
-					bitmap.SetPixel(j, i, Color.FromArgb(0, 0, 0));
-
-			bitmap.Save(Path.Combine(EnvironmentConstants.OutputPath, "day8.bmp"));
+			var bitmap1 = picture.ToBitmap(i => i);
+			bitmap1.Save(Path.Combine(EnvironmentConstants.OutputPath, "day8.bmp"));
 			return "BCYEF";
 		}
 	}
