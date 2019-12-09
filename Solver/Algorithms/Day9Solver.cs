@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using Solver.Base;
 using Solver.Model;
@@ -10,9 +11,6 @@ namespace Solver.Algorithms
 	{
 		private long GetCommand(long command)
 		{
-			if (command > 10000)
-				throw new Exception("Strange things happened");
-
 			if (command > 100)
 				return long.Parse(command.ToString().Substring(command.ToString().Length - 2));
 
@@ -26,35 +24,32 @@ namespace Solver.Algorithms
 				param.Add('0');
 			if (param.Count < 2)
 				param.Add('0');
+			if (param.Count < 3)
+				param.Add('0');
 
 			return param;
 		}
 
-		private long GetIndexFromParam(char param, long myCursor)
+		private long GetAddressFromParam(char paramMode, long param)
 		{
-			if (param == '0')
-				return GetValue(myCursor); // position mode
-			if (param == '1')
-				return myCursor; // value mode / immediate mode
-			if (param == '2')
-				return GetValue(RelativeBase - myCursor); // position mode
+			if (paramMode == '0')
+				return GetValue(param); // position mode
+			if (paramMode == '1')
+				return param; // value mode / immediate mode
+			if (paramMode == '2')
+				return GetValue(param) + RelativeBase; // relative base mode
 
 			throw new Exception("Strange things happened");
 		}
 
-		private long GetNeutralPosition(long pos)
+		private long GetNeutralPosition(long cursor)
 		{
-			var cPos = pos;
+			if (cursor > Commands.Length)
+				Array.Resize(ref _commands, Commands.Length + 1000 + (int)(cursor - Commands.Length));
 
-			if (cPos < 0)
-				cPos = _lastAccessedField + pos;
+			_lastAccessedField = Math.Max(_lastAccessedField, cursor);
 
-			if (cPos > Commands.Length)
-				Array.Resize(ref _commands, Commands.Length + 1000 + (int)(Commands.Length - cPos));
-
-			_lastAccessedField = Math.Max(_lastAccessedField, cPos);
-
-			return cPos;
+			return cursor;
 		}
 
 		private long GetValue(long pos)
@@ -94,16 +89,16 @@ namespace Solver.Algorithms
 
 			while (true)
 			{
-				var optoCode = GetValue(_cursor);
+				var opCode = GetValue(_cursor);
 
-				var command = GetCommand(optoCode);
+				var command = GetCommand(opCode);
 
 				if (command == 99)
 					return output;
 
-				var param = GetParams(optoCode);
+				var param = GetParams(opCode);
 
-				var a1 = GetIndexFromParam(param[0], _cursor + 1);
+				var a1 = GetAddressFromParam(param[0], _cursor + 1);
 
 				// input
 				if (command == 3)
@@ -130,8 +125,30 @@ namespace Solver.Algorithms
 					continue;
 				}
 
-				var a2 = GetIndexFromParam(param[1], _cursor + 2);
-				var pos = GetValue(_cursor + 3);
+				var a2 = GetAddressFromParam(param[1], _cursor + 2);
+
+				// jump-if-true
+				if (command == 5)
+				{
+					if (GetValue(a1) > 0)
+						_cursor = GetValue(a2);
+					else
+						_cursor += 3;
+					continue;
+				}
+
+				// jump-if-false
+				if (command == 6)
+				{
+					if (GetValue(a1) == 0)
+						_cursor = GetValue(a2);
+					else
+						_cursor += 3;
+					continue;
+				}
+
+				var immediate = GetValue(_cursor + 3);
+				var pos = param[2] == '2' ? immediate + RelativeBase : immediate;
 
 				if (pos == _cursor)
 					throw new Exception("Cursor is equal to position");
@@ -154,26 +171,6 @@ namespace Solver.Algorithms
 					continue;
 				}
 
-				// jump-if-true
-				if (command == 5)
-				{
-					if (GetValue(a1) > 0)
-						_cursor = GetValue(a2);
-					else
-						_cursor += 3;
-					continue;
-				}
-
-				// jump-if-false
-				if (command == 6)
-				{
-					if (GetValue(a1) == 0)
-						_cursor = GetValue(a2);
-					else
-						_cursor += 3;
-					continue;
-				}
-
 				// less than
 				if (command == 7)
 				{
@@ -193,7 +190,6 @@ namespace Solver.Algorithms
 						val = 1;
 					_cursor += 4;
 					SetValue(pos, val);
-
 					continue;
 				}
 
@@ -211,7 +207,7 @@ namespace Solver.Algorithms
 			intComputer.Commands = input.Commands;
 			var lastOut = intComputer.Run(input.Input);
 
-			if (intComputer.Output.Count> 1)
+			if (intComputer.Output.Count > 1)
 				throw new Exception("Faulting error code");
 
 			return lastOut;

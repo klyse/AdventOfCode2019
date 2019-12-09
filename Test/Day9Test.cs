@@ -41,6 +41,21 @@ namespace Test
 			Console.WriteLine(solution);
 			return solution;
 		}
+		
+		[Test]
+		public void ComputerV9Test_RealFileOfDay5()
+		{
+			var fileInput = "day5.txt".Read();
+			var input = _input.Parse(fileInput);
+
+			var computer = new IntComputerV9();
+			computer.Commands = input.Commands;
+
+			var solution = computer.Run(5);
+
+			Console.WriteLine(solution);
+			Assert.AreEqual(4283952, solution);
+		}
 
 		[Test]
 		[TestCase("104,1125899906842624,99", ExpectedResult = 1125899906842624)]
@@ -64,13 +79,11 @@ namespace Test
 			var computer = new IntComputerV9();
 			computer.Commands = input.Commands;
 
-			computer.Run(-1);
+			computer.Run(1);
 
 			var values = inp1.Split(',').Select(long.Parse).ToList();
-			for (var i = 0; i < values.Count; ++i)
-			{
-				Assert.AreEqual(values[i], computer.Output[i]);
-			}
+
+			CollectionAssert.AreEqual(values, computer.Output);
 		}
 
 		[TestCase("1102,34915192,34915192,7,4,7,99,0")]

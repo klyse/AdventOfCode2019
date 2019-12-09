@@ -62,8 +62,7 @@ namespace Test
 			var solution = _solver.Star2(input);
 
 			Console.WriteLine(solution);
-			Assert.Pass();
-			Assert.AreEqual(9240, solution);
+			Assert.AreEqual(4283952, solution);
 		}
 	}
 }
