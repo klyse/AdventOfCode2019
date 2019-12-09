@@ -8,18 +8,18 @@ namespace Solver.Algorithms
 {
 	public class IntComputerV9
 	{
-		private int GetCommand(int command)
+		private long GetCommand(long command)
 		{
 			if (command > 10000)
 				throw new Exception("Strange things happened");
 
 			if (command > 100)
-				return int.Parse(command.ToString().Substring(command.ToString().Length - 2));
+				return long.Parse(command.ToString().Substring(command.ToString().Length - 2));
 
 			return command;
 		}
 
-		private IList<char> GetParams(int command)
+		private IList<char> GetParams(long command)
 		{
 			var param = command.ToString().Reverse().Skip(2).ToList();
 			if (param.Count < 1)
@@ -30,120 +30,170 @@ namespace Solver.Algorithms
 			return param;
 		}
 
-		private int GetIndexFromParam(char param, int myCursor)
+		private long GetIndexFromParam(char param, long myCursor)
 		{
 			if (param == '0')
-				return Commands[myCursor];
+				return GetValue(myCursor); // position mode
 			if (param == '1')
-				return myCursor;
+				return myCursor; // value mode / immediate mode
+			if (param == '2')
+				return GetValue(RelativeBase - myCursor); // position mode
 
-			return -1;
+			throw new Exception("Strange things happened");
 		}
 
-		int _cursor;
-		public int[] Commands { get; set; }
+		private long GetNeutralPosition(long pos)
+		{
+			var cPos = pos;
 
-		public int IntComputer(int inputCommand)
+			if (cPos < 0)
+				cPos = _lastAccessedField + pos;
+
+			if (cPos > Commands.Length)
+				Array.Resize(ref _commands, Commands.Length + 1000 + (int)(Commands.Length - cPos));
+
+			_lastAccessedField = Math.Max(_lastAccessedField, cPos);
+
+			return cPos;
+		}
+
+		private long GetValue(long pos)
+		{
+			var cPos = GetNeutralPosition(pos);
+			return Commands[cPos];
+		}
+
+		private void SetValue(long pos, long val)
+		{
+			var cPos = GetNeutralPosition(pos);
+			Commands[cPos] = val;
+		}
+
+		long _cursor;
+		long _lastAccessedField;
+		private long[] _commands;
+
+		public long[] Commands
+		{
+			get => _commands;
+			set
+			{
+				_commands = value;
+				_lastAccessedField = _commands.Length;
+			}
+		}
+
+		public long RelativeBase { get; set; }
+		public IList<long> Output { get; set; }
+
+		public long Run(long inputCommand)
 		{
 			_cursor = 0;
-			var output = -1;
+			Output = new List<long>();
+			long output = -1;
 
 			while (true)
 			{
-				var command = Commands[_cursor];
+				var optoCode = GetValue(_cursor);
 
-				var cleanCommand = GetCommand(command);
+				var command = GetCommand(optoCode);
 
-				if (cleanCommand == 99)
+				if (command == 99)
 					return output;
 
-				var param = GetParams(command);
+				var param = GetParams(optoCode);
 
 				var a1 = GetIndexFromParam(param[0], _cursor + 1);
 
 				// input
-				if (cleanCommand == 3)
+				if (command == 3)
 				{
-					Commands[a1] = inputCommand;
+					SetValue(a1, inputCommand);
 					_cursor += 2;
 					continue;
 				}
 
 				// output
-				if (cleanCommand == 4)
+				if (command == 4)
 				{
-					output = Commands[a1];
-					Console.WriteLine(output);
+					output = GetValue(a1);
+					Output.Add(output);
+					_cursor += 2;
+					continue;
+				}
+
+				// reset relative base
+				if (command == 9)
+				{
+					RelativeBase += GetValue(a1);
 					_cursor += 2;
 					continue;
 				}
 
 				var a2 = GetIndexFromParam(param[1], _cursor + 2);
-				var pos = Commands[_cursor + 3];
+				var pos = GetValue(_cursor + 3);
 
 				if (pos == _cursor)
 					throw new Exception("Cursor is equal to position");
 
-				if (pos < 0)
-					pos = Commands.Length + pos;
-
 				// addition
-				if (cleanCommand == 1)
+				if (command == 1)
 				{
-					var val = Commands[a2] + Commands[a1];
+					var val = GetValue(a2) + GetValue(a1);
 					_cursor += 4;
-					Commands[pos] = val;
+					SetValue(pos, val);
 					continue;
 				}
 
 				// multiplication
-				if (cleanCommand == 2)
+				if (command == 2)
 				{
-					var val = Commands[a2] * Commands[a1];
+					var val = GetValue(a2) * GetValue(a1);
 					_cursor += 4;
-					Commands[pos] = val;
+					SetValue(pos, val);
 					continue;
 				}
 
 				// jump-if-true
-				if (cleanCommand == 5)
+				if (command == 5)
 				{
-					if (Commands[a1] > 0)
-						_cursor = Commands[a2];
+					if (GetValue(a1) > 0)
+						_cursor = GetValue(a2);
 					else
 						_cursor += 3;
 					continue;
 				}
 
 				// jump-if-false
-				if (cleanCommand == 6)
+				if (command == 6)
 				{
-					if (Commands[a1] == 0)
-						_cursor = Commands[a2];
+					if (GetValue(a1) == 0)
+						_cursor = GetValue(a2);
 					else
 						_cursor += 3;
 					continue;
 				}
 
 				// less than
-				if (cleanCommand == 7)
+				if (command == 7)
 				{
 					var val = 0;
-					if (Commands[a1] < Commands[a2])
+					if (GetValue(a1) < GetValue(a2))
 						val = 1;
 					_cursor += 4;
-					Commands[pos] = val;
+					SetValue(pos, val);
 					continue;
 				}
 
 				// equals
-				if (cleanCommand == 8)
+				if (command == 8)
 				{
 					var val = 0;
-					if (Commands[a1] == Commands[a2])
+					if (GetValue(a1) == GetValue(a2))
 						val = 1;
 					_cursor += 4;
-					Commands[pos] = val;
+					SetValue(pos, val);
+
 					continue;
 				}
 
@@ -152,17 +202,22 @@ namespace Solver.Algorithms
 		}
 	}
 
-	public class Day9Solver : ISolver<int, Day9Input>
+	public class Day9Solver : ISolver<long, Day9Input>
 	{
-		public int Star1(Day9Input input)
+		public long Star1(Day9Input input)
 		{
 			var intComputer = new IntComputerV9();
 
 			intComputer.Commands = input.Commands;
-			return intComputer.IntComputer(input.Input);
+			var lastOut = intComputer.Run(input.Input);
+
+			if (intComputer.Output.Count> 1)
+				throw new Exception("Faulting error code");
+
+			return lastOut;
 		}
 
-		public int Star2(Day9Input input)
+		public long Star2(Day9Input input)
 		{
 			throw new NotImplementedException();
 		}
