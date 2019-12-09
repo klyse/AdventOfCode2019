@@ -215,7 +215,15 @@ namespace Solver.Algorithms
 
 		public long Star2(Day9Input input)
 		{
-			throw new NotImplementedException();
+			var intComputer = new IntComputerV9();
+
+			intComputer.Commands = input.Commands;
+			var lastOut = intComputer.Run(input.Input);
+
+			if (intComputer.Output.Count > 1)
+				throw new Exception("Faulting error code");
+
+			return lastOut;
 		}
 	}
 }

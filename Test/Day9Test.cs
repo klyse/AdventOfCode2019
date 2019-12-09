@@ -114,29 +114,15 @@ namespace Test
 		}
 
 		[Test]
-		[TestCase("", ExpectedResult = 0)]
-		public long Example2(string inp1)
-		{
-			var inputStr = new[] { inp1 };
-			var input = _input.Parse(inputStr);
-
-			var solution = _solver.Star2(input);
-
-			Console.WriteLine(solution);
-			return solution;
-		}
-
-		[Test]
 		public void Star2()
 		{
 			var fileInput = File.Read();
 			var input = _input.Parse(fileInput);
-
+			input.Input = 2;
 			var solution = _solver.Star2(input);
 
 			Console.WriteLine(solution);
-			Assert.Pass();
-			Assert.AreEqual(9240, solution);
+			Assert.AreEqual(44997, solution);
 		}
 	}
 }
