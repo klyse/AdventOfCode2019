@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using Solver.Base;
 using Solver.Model;
@@ -9,6 +8,24 @@ namespace Solver.Algorithms
 {
 	public class IntComputerV9
 	{
+		private long[] _commands;
+
+		private long _cursor;
+		private long _lastAccessedField;
+
+		public long[] Commands
+		{
+			get => _commands;
+			set
+			{
+				_commands = value;
+				_lastAccessedField = _commands.Length;
+			}
+		}
+
+		public long RelativeBase { get; set; }
+		public IList<long> Output { get; set; }
+
 		private long GetCommand(long command)
 		{
 			if (command > 100)
@@ -63,23 +80,6 @@ namespace Solver.Algorithms
 			var cPos = GetNeutralPosition(pos);
 			Commands[cPos] = val;
 		}
-
-		long _cursor;
-		long _lastAccessedField;
-		private long[] _commands;
-
-		public long[] Commands
-		{
-			get => _commands;
-			set
-			{
-				_commands = value;
-				_lastAccessedField = _commands.Length;
-			}
-		}
-
-		public long RelativeBase { get; set; }
-		public IList<long> Output { get; set; }
 
 		public long Run(long inputCommand)
 		{

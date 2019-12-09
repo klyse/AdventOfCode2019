@@ -41,7 +41,7 @@ namespace Test
 			Console.WriteLine(solution);
 			return solution;
 		}
-		
+
 		[Test]
 		public void ComputerV9Test_RealFileOfDay5()
 		{
@@ -110,8 +110,7 @@ namespace Test
 			var solution = _solver.Star1(input);
 
 			Console.WriteLine(solution);
-			Assert.Pass();
-			Assert.AreEqual(199988, solution);
+			Assert.AreEqual(2494485073, solution);
 		}
 
 		[Test]
