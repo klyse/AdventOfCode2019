@@ -20,11 +20,18 @@ namespace Test
 		}
 
 		[Test]
-		[TestCase("", ExpectedResult = 0)]
-		public int Example1(string inp1)
+		[TestCase("3,12,6,12,15,1,13,14,13,4,13,99,-1,0,1,9", 12, ExpectedResult = 1)]
+		[TestCase("3,3,1105,-1,9,1101,0,0,12,4,12,99,1", 1123, ExpectedResult = 1)]
+		[TestCase("3,12,6,12,15,1,13,14,13,4,13,99,-1,0,1,9", 0, ExpectedResult = 0)]
+		[TestCase("3,3,1105,-1,9,1101,0,0,12,4,12,99,1", 0, ExpectedResult = 0)]
+		[TestCase("3,21,1008,21,8,20,1005,20,22,107,8,21,20,1006,20,31,1106,0,36,98,0,0,1002,21,125,20,4,20,1105,1,46,104,999,1105,1,46,1101,1000,1,20,4,20,1105,1,46,98,99", 6, ExpectedResult = 999)]
+		[TestCase("3,21,1008,21,8,20,1005,20,22,107,8,21,20,1006,20,31,1106,0,36,98,0,0,1002,21,125,20,4,20,1105,1,46,104,999,1105,1,46,1101,1000,1,20,4,20,1105,1,46,98,99", 8, ExpectedResult = 1000)]
+		[TestCase("3,21,1008,21,8,20,1005,20,22,107,8,21,20,1006,20,31,1106,0,36,98,0,0,1002,21,125,20,4,20,1105,1,46,104,999,1105,1,46,1101,1000,1,20,4,20,1105,1,46,98,99", 9, ExpectedResult = 1001)]
+		public int ComputerV9Test(string inp1, int inputCommand)
 		{
 			var inputStr = new[] { inp1 };
 			var input = _input.Parse(inputStr);
+			input.Input = inputCommand;
 
 			var solution = _solver.Star1(input);
 
