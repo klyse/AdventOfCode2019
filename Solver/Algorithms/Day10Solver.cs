@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Drawing;
 using System.IO;
 using System.Linq;
-using System.Numerics;
 using NeoMatrix;
 using Solver.Base;
 using Solver.Model;
@@ -44,25 +42,6 @@ namespace Solver.Algorithms
 
 	public class Day10Solver : ISolver<Observatory, Day10Input>
 	{
-		private int? LCM(int a, int b)
-		{
-			a = Math.Abs(a);
-			b = Math.Abs(b);
-
-			if (a == 0 || b == 0)
-				return null;
-
-			var smallNr = Math.Max(a, b);
-			while (true)
-			{
-				if (a % smallNr == 0 &&
-					b % smallNr == 0)
-					return smallNr;
-				smallNr--;
-			}
-		}
-
-
 		public Observatory Star1(Day10Input input)
 		{
 			var observatories = new List<Observatory>();
@@ -142,6 +121,24 @@ namespace Solver.Algorithms
 		public Observatory Star2(Day10Input input)
 		{
 			throw new NotImplementedException();
+		}
+
+		private int? LCM(int a, int b)
+		{
+			a = Math.Abs(a);
+			b = Math.Abs(b);
+
+			if (a == 0 || b == 0)
+				return null;
+
+			var smallNr = Math.Max(a, b);
+			while (true)
+			{
+				if (a % smallNr == 0 &&
+					b % smallNr == 0)
+					return smallNr;
+				smallNr--;
+			}
 		}
 	}
 }

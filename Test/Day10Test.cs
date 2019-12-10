@@ -38,7 +38,7 @@ namespace Test
 			var solution = _solver.Star1(input);
 
 			solution.Space.ToBitmap(c => c.ContainsAsteroid ? 100 : 0).Save(Path.Combine(EnvironmentConstants.OutputPath, "day10_1.bmp"));
-			
+
 			Assert.AreEqual(8, solution.TotalVisibleAsteroids);
 			Assert.AreEqual(new Point(3, 4), solution.Location);
 		}
@@ -57,14 +57,14 @@ namespace Test
 							   "#..#....#.",
 							   ".##.#..###",
 							   "##...#..#.",
-							   ".#....####",
+							   ".#....####"
 						   };
 			var input = _input.Parse(inputStr);
 
 			var solution = _solver.Star1(input);
 
 			solution.Space.ToBitmap(c => c.ContainsAsteroid ? 100 : 0).Save(Path.Combine(EnvironmentConstants.OutputPath, "day10_2.bmp"));
-			
+
 			Assert.AreEqual(33, solution.TotalVisibleAsteroids);
 			Assert.AreEqual(new Point(5, 8), solution.Location);
 		}
@@ -83,7 +83,7 @@ namespace Test
 							   "..#...##..",
 							   "..##....##",
 							   "......#...",
-							   ".####.###.",
+							   ".####.###."
 						   };
 			var input = _input.Parse(inputStr);
 
@@ -109,7 +109,7 @@ namespace Test
 							   "..#.#..#.#",
 							   "#..#.#.###",
 							   ".##...##.#",
-							   ".....#.#..",
+							   ".....#.#.."
 						   };
 			var input = _input.Parse(inputStr);
 
@@ -145,7 +145,7 @@ namespace Test
 							   "....##.##.###..#####",
 							   ".#.#.###########.###",
 							   "#.#.#.#####.####.###",
-							   "###.##.####.##.#..##",
+							   "###.##.####.##.#..##"
 						   };
 			var input = _input.Parse(inputStr);
 

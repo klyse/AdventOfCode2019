@@ -28,6 +28,16 @@ namespace Solver.Model
 	{
 		public Matrix<SpaceUnit> Space { get; set; }
 
+		public object Clone()
+		{
+			var mat = Matrix<SpaceUnit>.NewMatrix(Space.Rows, Space.Columns, (row, column) => (SpaceUnit)Space[row, column].Clone());
+
+			return new Day10Input
+				   {
+					   Space = mat
+				   };
+		}
+
 		public Day10Input Parse(string[] values)
 		{
 			var columns = values.First().Length;
@@ -40,21 +50,11 @@ namespace Solver.Model
 																   return new SpaceUnit
 																		  {
 																			  ContainsAsteroid = elem == '#',
-																			  Position = new Point(column,row)
+																			  Position = new Point(column, row)
 																		  };
 															   });
 
 			return this;
-		}
-
-		public object Clone()
-		{
-			var mat = Matrix<SpaceUnit>.NewMatrix(Space.Rows, Space.Columns, (row, column) => (SpaceUnit)Space[row, column].Clone());
-
-			return new Day10Input
-				   {
-					   Space = mat
-				   };
 		}
 	}
 }
