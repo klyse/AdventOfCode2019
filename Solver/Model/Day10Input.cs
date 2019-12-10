@@ -1,15 +1,30 @@
-﻿using System.Linq;
+﻿using System;
+using System.Drawing;
+using System.Linq;
 using NeoMatrix;
 using Solver.Base;
 
 namespace Solver.Model
 {
-	public class SpaceUnit
+	public class SpaceUnit : ICloneable
 	{
 		public bool ContainsAsteroid { get; set; }
+		public bool Shadowed { get; set; }
+		public bool IsVisible => ContainsAsteroid && !Shadowed;
+
+		public Point Position { get; set; }
+
+		public object Clone()
+		{
+			return new SpaceUnit
+				   {
+					   ContainsAsteroid = ContainsAsteroid,
+					   Position = Position
+				   };
+		}
 	}
 
-	public class Day10Input : IInput<Day10Input>
+	public class Day10Input : IInput<Day10Input>, ICloneable
 	{
 		public Matrix<SpaceUnit> Space { get; set; }
 
@@ -24,11 +39,22 @@ namespace Solver.Model
 
 																   return new SpaceUnit
 																		  {
-																			  ContainsAsteroid = elem == '#'
+																			  ContainsAsteroid = elem == '#',
+																			  Position = new Point(column,row)
 																		  };
 															   });
 
 			return this;
+		}
+
+		public object Clone()
+		{
+			var mat = Matrix<SpaceUnit>.NewMatrix(Space.Rows, Space.Columns, (row, column) => (SpaceUnit)Space[row, column].Clone());
+
+			return new Day10Input
+				   {
+					   Space = mat
+				   };
 		}
 	}
 }
