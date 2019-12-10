@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Drawing;
 using System.IO;
 using System.Linq;
@@ -43,6 +44,25 @@ namespace Solver.Algorithms
 
 	public class Day10Solver : ISolver<Observatory, Day10Input>
 	{
+		private int? LCM(int a, int b)
+		{
+			a = Math.Abs(a);
+			b = Math.Abs(b);
+
+			if (a == 0 || b == 0)
+				return null;
+
+			var smallNr = Math.Max(a, b);
+			while (true)
+			{
+				if (a % smallNr == 0 &&
+					b % smallNr == 0)
+					return smallNr;
+				smallNr--;
+			}
+		}
+
+
 		public Observatory Star1(Day10Input input)
 		{
 			var observatories = new List<Observatory>();
@@ -70,9 +90,24 @@ namespace Solver.Algorithms
 						if (objective.Position.Y == i && objective.Position.X == j)
 							continue; // self
 
+						if (!objective.ContainsAsteroid)
+							continue;
+
 						var vector = new Point(objective.Position.X - me.Position.X, objective.Position.Y - me.Position.Y);
 
-						var relPoint = me.Position;
+						var lcm = LCM(vector.X, vector.Y);
+						if (lcm is {} lcmV)
+							vector = new Point(vector.X / lcmV, vector.Y / lcmV);
+
+
+						if (vector.X == 0)
+							vector.Y = vector.Y < 0 ? -1 : 1;
+
+						if (vector.Y == 0)
+							vector.X = vector.X < 0 ? -1 : 1;
+
+
+						var relPoint = objective.Position;
 						while (true)
 						{
 							relPoint = new Point(relPoint.X + vector.X, relPoint.Y + vector.Y);
@@ -86,7 +121,7 @@ namespace Solver.Algorithms
 					}
 
 					currentRange += 2;
-					if (currentRange > input.Space.Rows && currentRange > input.Space.Columns)
+					if (currentRange / 2 > input.Space.Rows && currentRange / 2 > input.Space.Columns)
 						break;
 				}
 
@@ -94,11 +129,11 @@ namespace Solver.Algorithms
 								  {
 									  Space = space,
 									  Location = new Point(j, i),
-									  TotalVisibleAsteroids = space.GetFlat().Count(c => c.IsVisible)
+									  TotalVisibleAsteroids = space.GetFlat().Count(c => c.IsVisible) - 1
 								  };
 				observatories.Add(observatory);
 
-				observatory.Space.ToBitmap(c => c.Position == observatory.Location ? 255 : c.IsVisible ? 100 : c.ContainsAsteroid ? 50 : 0).Save(Path.Combine(EnvironmentConstants.OutputPath, $"day10_{i},{j}.bmp"));
+				observatory.Space.ToBitmap(c => c.Position == observatory.Location ? 255 : c.IsVisible ? 100 : c.ContainsAsteroid ? 50 : 0).Save(Path.Combine(EnvironmentConstants.OutputPath, $"day10/{j},{i}.bmp"));
 			}
 
 			return observatories.OrderByDescending(c => c.TotalVisibleAsteroids).First();
