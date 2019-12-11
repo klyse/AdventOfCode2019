@@ -63,7 +63,7 @@ namespace Test
 			var input = _input.Parse(inputStr);
 
 			var solution = _solver.Star1(input);
-			
+
 			solution.Space.ToBitmap(c => c.Position == solution.Location ? 255 : c.IsVisible ? 100 : c.ContainsAsteroid ? 50 : 0).Save(Path.Combine(EnvironmentConstants.OutputPath, $"day10/2_{solution.Location.X},{solution.Location.Y}.bmp"));
 
 			Assert.AreEqual(33, solution.TotalVisibleAsteroids);
