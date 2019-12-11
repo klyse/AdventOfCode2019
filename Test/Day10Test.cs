@@ -172,18 +172,129 @@ namespace Test
 			Assert.AreEqual(269, solution);
 		}
 
-		//[Test]
-		//[TestCase("", ExpectedResult = 0)]
-		//public long Example2(string inp1)
-		//{
-		//	var inputStr = new[] { inp1 };
-		//	var input = _input.Parse(inputStr);
+		static int LengthSquare(Point p1, Point p2)
+		{
+			int xDiff = p1.X - p2.X;
+			int yDiff = p1.Y - p2.Y;
+			return xDiff * xDiff + yDiff * yDiff;
+		}
 
-		//	var solution = _solver.Star2(input);
+		static void PrintAngle(Point A, Point B, Point C)
+		{
+			// Square of lengths be a2, b2, c2 
+			int a2 = LengthSquare(B, C);
+			int b2 = LengthSquare(A, C);
+			int c2 = LengthSquare(A, B);
 
-		//	Console.WriteLine(solution);
-		//	return solution;
-		//}
+			// length of sides be a, b, c 
+			float a = (float)Math.Sqrt(a2);
+			float b = (float)Math.Sqrt(b2);
+			float c = (float)Math.Sqrt(c2);
+
+			// From Cosine law 
+			float alpha = (float)Math.Acos((b2 + c2 - a2) /
+										   (2 * b * c));
+			float betta = (float)Math.Acos((a2 + c2 - b2) /
+										   (2 * a * c));
+			float gamma = (float)Math.Acos((a2 + b2 - c2) /
+										   (2 * a * b));
+
+			// Converting to degree 
+			alpha = (float)(alpha * 180 / Math.PI);
+			betta = (float)(betta * 180 / Math.PI);
+			gamma = (float)(gamma * 180 / Math.PI);
+
+			// printing all the angles 
+			Console.WriteLine("alpha : " + alpha);
+			Console.WriteLine("betta : " + betta);
+			Console.WriteLine("gamma : " + gamma);
+
+			Console.WriteLine("gamma + alpha : " + (gamma + alpha));
+			Console.WriteLine("gamma + betta : " + (gamma + betta));
+			Console.WriteLine("alpha + beta  : " + (alpha + betta));
+			Console.WriteLine("alpha + gamma : " + (alpha + gamma));
+			Console.WriteLine("beta + gamma  : " + (betta + gamma));
+		}
+
+		//.#....###24...#..
+		//##...##.13#67..9#
+		//##...#...5.8####.
+		//..#.....X...###..
+		//..#.#.....#....##
+		[Test]
+		[TestCase("1", 0, 2, 0, 100)]
+		[TestCase("2", 1, 3, 0, 100)]
+		[TestCase("3", 1, 2, 0, 100)]
+		[TestCase("4", 2, 3, 0, 100)]
+		[TestCase("5", 1, 1, 0, 100)]
+		[TestCase("6", 3, 3, 0, 100)]
+		[TestCase("7", 4, 3, 0, 100)]
+		[TestCase("8", 3, 2, 0, 100)]
+		[TestCase("9", 7, 3, 0, 100)]
+		public void Example2_1(string num, int p2X, int p2Y, int p3X, int p3Y)
+		{
+			PrintAngle(new Point(0, 0), new Point(p2X, p2Y), new Point(p3X, p3Y));
+			Assert.Pass();
+		}
+
+		//.#....###.....#..
+		//##...##...#.....#
+		//##...#......1234.
+		//..#.....X...5##..
+		//..#.9.....8....76
+		[TestCase("1", 4, 1, 0, 100)]
+		[TestCase("2", 5, 1, 0, 100)]
+		[TestCase("3", 6, 1, 0, 100)]
+		[TestCase("4", 7, 1, 0, 100)]
+		[TestCase("5", 4, 0, 0, 100)]
+
+		//[TestCase("6", -1, 8, 0, 100)]
+		//[TestCase("7", -1, 7, 0, 100)]
+		//[TestCase("8", -1, 2, 0, 100)]
+		//[TestCase("9", -1, -4, 0, 100)]
+
+		[TestCase("6", 1, 8, 0, 100)]
+		[TestCase("7", 1, 7, 0, 100)]
+		[TestCase("8", 1, 2, 0, 100)]
+
+		[TestCase("9", 1, 4, 0, 100)]
+		public void Example2_2(string num, int p2X, int p2Y, int p3X, int p3Y)
+		{
+			Console.WriteLine(num);
+			PrintAngle(new Point(0, 0), new Point(p2X, p2Y), new Point(p3X, p3Y));
+			Assert.Pass();
+		}
+
+		//.8....###.....#..
+		//56...9#...#.....#
+		//34...7...........
+		//..2.....X....##..
+		//..1..............
+		//[TestCase("1", -6, -1, 0, -100)]
+		[TestCase("1", 6, 1, 0, 100)]
+		
+		//[TestCase("2", -6, 0, 0,  100)]
+		//[TestCase("3", -8, 1, 0,  100)]
+		//[TestCase("4", -7, 1, 0,  100)]
+		//[TestCase("5", -8, 2, 0,  100)]
+		//[TestCase("6", -7, 2, 0,  100)]
+		//[TestCase("7", -3, 1, 0,  100)]
+		//[TestCase("8", -7, 3, 0,  100)]
+		//[TestCase("9", -3, 2, 0,  100)]
+		[TestCase("2", 6, 0, 0,  100)]
+		[TestCase("3", 8, 1, 0,  100)]
+		[TestCase("4", 7, 1, 0,  100)]
+		[TestCase("5", 8, 2, 0,  100)]
+		[TestCase("6", 7, 2, 0,  100)]
+		[TestCase("7", 3, 1, 0,  100)]
+		[TestCase("8", 7, 3, 0,  100)]
+		[TestCase("9", 3, 2, 0,  100)]
+		public void Example2_3(string num, int p2X, int p2Y, int p3X, int p3Y)
+		{
+			Console.WriteLine(num);
+			PrintAngle(new Point(0, 0), new Point(p2X, p2Y), new Point(p3X, p3Y));
+			Assert.Pass();
+		}
 
 		[Test]
 		public void Star2()
