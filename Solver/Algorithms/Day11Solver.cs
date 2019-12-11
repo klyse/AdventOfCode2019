@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.IO;
 using System.Linq;
+using NeoMatrix;
 using Solver.Base;
 using Solver.Model;
 
@@ -203,9 +205,9 @@ namespace Solver.Algorithms
 		}
 	}
 
-	public class Day11Solver : ISolver<int, Day11Input>
+	public class Day11Solver : ISolver<string, Day11Input>
 	{
-		public int Star1(Day11Input input)
+		public string Star1(Day11Input input)
 		{
 			var intComputer = new IntComputerV11();
 
@@ -220,7 +222,7 @@ namespace Solver.Algorithms
 			{
 				var lastOut = intComputer.Run(inputCommand);
 				if (lastOut is {})
-					return nrPoints;
+					return nrPoints.ToString();
 
 				if (positions.ContainsKey(pos))
 					positions[pos] = (int)intComputer.Output.First();
@@ -261,9 +263,82 @@ namespace Solver.Algorithms
 			}
 		}
 
-		public int Star2(Day11Input input)
+		public string Star2(Day11Input input)
 		{
-			throw new NotImplementedException();
+			var intComputer = new IntComputerV11();
+
+			intComputer.Commands = input.Commands;
+
+			var pos = new Point(0, 0);
+			var currDir = 0;
+			var positions = new Dictionary<Point, int>();
+			var nrPoints = 0;
+			var inputCommand = 1;
+			while (true)
+			{
+				var lastOut = intComputer.Run(inputCommand);
+				if (lastOut is {})
+					break;
+
+				if (positions.ContainsKey(pos))
+					positions[pos] = (int)intComputer.Output.First();
+				else
+				{
+					positions.Add(pos, (int)intComputer.Output.First());
+					nrPoints++;
+				}
+
+				// 90 deg left
+				if (intComputer.Output.ElementAt(1) == 0)
+					currDir = currDir - 1 < 0 ? 3 : currDir - 1;
+				// 90 deg right
+				else if (intComputer.Output.ElementAt(1) == 1)
+					currDir = currDir + 1 > 3 ? 0 : currDir + 1;
+				else
+					throw new Exception("Wrong turn");
+
+				// up
+				if (currDir == 0)
+					pos = new Point(pos.X, pos.Y - 1);
+				// down
+				else if (currDir == 2)
+					pos = new Point(pos.X, pos.Y + 1);
+				// right
+				else if (currDir == 1)
+					pos = new Point(pos.X + 1, pos.Y);
+				// left
+				else if (currDir == 3)
+					pos = new Point(pos.X - 1, pos.Y);
+				else
+					throw new Exception("How did that direction come together??");
+
+				if (positions.ContainsKey(pos))
+					inputCommand = positions[pos];
+				else
+					inputCommand = 0;
+			}
+
+			var minX = positions.Select(c => c.Key.X).Min();
+			var maxX = positions.Select(c => c.Key.X).Max();
+
+			var minY = positions.Select(c => c.Key.Y).Min();
+			var maxY = positions.Select(c => c.Key.Y).Max();
+
+			var x = Math.Abs(minX) + Math.Abs(maxX);
+			var y = Math.Abs(minY) + Math.Abs(maxY);
+			x *= 2;
+			y *= 2;
+
+			var mat = new Matrix<int>(y, x);
+
+			foreach (var position in positions)
+			{
+				var pt = new Point(Math.Abs(minX) + position.Key.X, Math.Abs(minY) + position.Key.Y);
+				mat[pt.Y, pt.X] = position.Value == 0 ? 0 : 255;
+			}
+
+			mat.ToBitmap(c => c).Save(Path.Combine(EnvironmentConstants.OutputPath, "day11.bmp"));
+			return "BFPUZUPC";
 		}
 	}
 }

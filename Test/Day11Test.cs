@@ -27,20 +27,18 @@ namespace Test
 			var solution = _solver.Star1(input);
 
 			Console.WriteLine(solution);
-			Assert.Pass();
-			Assert.AreEqual("1620", solution);
+			Assert.AreEqual("2415", solution);
 		}
 
 		[Test]
 		public void Star2()
 		{
 			var fileInput = File.Read();
-			var input = _input.Parse(new[] { fileInput[0], "6", "25" });
-
+			var input = _input.Parse(fileInput);
 			var solution = _solver.Star2(input);
 
 			Console.WriteLine(solution);
-			Assert.AreEqual("BCYEF", solution);
+			Assert.AreEqual("2415", solution);
 		}
 	}
 }
