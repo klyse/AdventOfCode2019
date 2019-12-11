@@ -39,7 +39,7 @@ namespace Solver.Algorithms
 		}
 	}
 
-	public class Day10Solver : ISolver<Observatory, Day10Input>
+	public class Day10Solver
 	{
 		public Observatory Star1(Day10Input input)
 		{
@@ -157,7 +157,7 @@ namespace Solver.Algorithms
 			public SpaceUnit SpaceUnit { get; set; }
 		}
 
-		public Observatory Star2(Day10Input input)
+		public int Star2(Day10Input input)
 		{
 			var observatory = Star1(input);
 
@@ -182,15 +182,15 @@ namespace Solver.Algorithms
 					quad = 1;
 					angle = -angle;
 				}
-				else if (sup.X <= pt1.X && sup.Y >= pt1.Y)
+				else if (sup.X <= pt1.X && sup.Y > pt1.Y)
 				{
 					quad = 2;
 					angle = -angle;
 				}
-				else if (sup.X > pt1.X && sup.Y <= pt1.Y)
+				else if (sup.X <= pt1.X && sup.Y <= pt1.Y)
 					quad = 3;
 				else
-					continue; //throw new Exception("Missing param");
+					throw new Exception("Missing param");
 
 				positions.Add(new SpaceUnitAngle
 							  {
@@ -203,7 +203,10 @@ namespace Solver.Algorithms
 			positions = positions.OrderBy(c => c.Quadrant)
 								 .ThenByDescending(c => c.Angle)
 								 .ToList();
-			return null;
+
+			var p199 = positions[199];
+
+			return p199.SpaceUnit.Position.X * 100 + p199.SpaceUnit.Position.Y;
 		}
 
 		private int? LCM(int a, int b)

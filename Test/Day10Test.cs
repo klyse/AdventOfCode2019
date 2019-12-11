@@ -328,8 +328,7 @@ namespace Test
 			var solution = _solver.Star2(input);
 
 			Console.WriteLine(solution);
-			Assert.Pass();
-			Assert.AreEqual(44997, solution);
+			Assert.AreEqual(802, solution);
 		}
 
 		[Test]
@@ -340,8 +339,7 @@ namespace Test
 			var solution = _solver.Star2(input);
 
 			Console.WriteLine(solution);
-			Assert.Pass();
-			Assert.AreEqual(44997, solution);
+			Assert.AreEqual(612, solution);
 		}
 	}
 }
