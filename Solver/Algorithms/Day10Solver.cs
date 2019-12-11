@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using NeoMatrix;
-using Solver.Base;
 using Solver.Model;
 using Region = NeoMatrix.Region;
 
@@ -115,32 +114,32 @@ namespace Solver.Algorithms
 			return observatories.OrderByDescending(c => c.TotalVisibleAsteroids).First();
 		}
 
-		static int LengthSquare(Point p1, Point p2)
+		private static int LengthSquare(Point p1, Point p2)
 		{
-			int xDiff = p1.X - p2.X;
-			int yDiff = p1.Y - p2.Y;
+			var xDiff = p1.X - p2.X;
+			var yDiff = p1.Y - p2.Y;
 			return xDiff * xDiff + yDiff * yDiff;
 		}
 
-		static double GetAngle(Point A, Point B, Point C)
+		private static double GetAngle(Point A, Point B, Point C)
 		{
 			// Square of lengths be a2, b2, c2 
-			int a2 = LengthSquare(B, C);
-			int b2 = LengthSquare(A, C);
-			int c2 = LengthSquare(A, B);
+			var a2 = LengthSquare(B, C);
+			var b2 = LengthSquare(A, C);
+			var c2 = LengthSquare(A, B);
 
 			// length of sides be a, b, c 
-			float a = (float)Math.Sqrt(a2);
-			float b = (float)Math.Sqrt(b2);
-			float c = (float)Math.Sqrt(c2);
+			var a = (float)Math.Sqrt(a2);
+			var b = (float)Math.Sqrt(b2);
+			var c = (float)Math.Sqrt(c2);
 
 			// From Cosine law 
-			float alpha = (float)Math.Acos((b2 + c2 - a2) /
-										   (2 * b * c));
-			float betta = (float)Math.Acos((a2 + c2 - b2) /
-										   (2 * a * c));
-			float gamma = (float)Math.Acos((a2 + b2 - c2) /
-										   (2 * a * b));
+			var alpha = (float)Math.Acos((b2 + c2 - a2) /
+										 (2 * b * c));
+			var betta = (float)Math.Acos((a2 + c2 - b2) /
+										 (2 * a * c));
+			var gamma = (float)Math.Acos((a2 + b2 - c2) /
+										 (2 * a * b));
 
 			// Converting to degree 
 			alpha = (float)(alpha * 180 / Math.PI);
@@ -148,13 +147,6 @@ namespace Solver.Algorithms
 			gamma = (float)(gamma * 180 / Math.PI);
 
 			return alpha;
-		}
-
-		public class SpaceUnitAngle
-		{
-			public double Angle { get; set; }
-			public int Quadrant { get; set; }
-			public SpaceUnit SpaceUnit { get; set; }
 		}
 
 		public int Star2(Day10Input input)
@@ -225,6 +217,13 @@ namespace Solver.Algorithms
 					return smallNr;
 				smallNr--;
 			}
+		}
+
+		public class SpaceUnitAngle
+		{
+			public double Angle { get; set; }
+			public int Quadrant { get; set; }
+			public SpaceUnit SpaceUnit { get; set; }
 		}
 	}
 }
