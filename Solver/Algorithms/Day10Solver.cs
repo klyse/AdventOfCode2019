@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using NeoMatrix;
-using Solver.Base;
 using Solver.Model;
 using Region = NeoMatrix.Region;
 
@@ -39,7 +38,7 @@ namespace Solver.Algorithms
 		}
 	}
 
-	public class Day10Solver : ISolver<Observatory, Day10Input>
+	public class Day10Solver
 	{
 		public Observatory Star1(Day10Input input)
 		{
@@ -115,9 +114,91 @@ namespace Solver.Algorithms
 			return observatories.OrderByDescending(c => c.TotalVisibleAsteroids).First();
 		}
 
-		public Observatory Star2(Day10Input input)
+		private static int LengthSquare(Point p1, Point p2)
 		{
-			throw new NotImplementedException();
+			var xDiff = p1.X - p2.X;
+			var yDiff = p1.Y - p2.Y;
+			return xDiff * xDiff + yDiff * yDiff;
+		}
+
+		private static double GetAngle(Point A, Point B, Point C)
+		{
+			// Square of lengths be a2, b2, c2 
+			var a2 = LengthSquare(B, C);
+			var b2 = LengthSquare(A, C);
+			var c2 = LengthSquare(A, B);
+
+			// length of sides be a, b, c 
+			var a = (float)Math.Sqrt(a2);
+			var b = (float)Math.Sqrt(b2);
+			var c = (float)Math.Sqrt(c2);
+
+			// From Cosine law 
+			var alpha = (float)Math.Acos((b2 + c2 - a2) /
+										 (2 * b * c));
+			var betta = (float)Math.Acos((a2 + c2 - b2) /
+										 (2 * a * c));
+			var gamma = (float)Math.Acos((a2 + b2 - c2) /
+										 (2 * a * b));
+
+			// Converting to degree 
+			alpha = (float)(alpha * 180 / Math.PI);
+			betta = (float)(betta * 180 / Math.PI);
+			gamma = (float)(gamma * 180 / Math.PI);
+
+			return alpha;
+		}
+
+		public int Star2(Day10Input input)
+		{
+			var observatory = Star1(input);
+
+			var maxX = (int)observatory.Space.Max(c => c.Position.X);
+
+			var pt1 = observatory.Location;
+			var pt3 = new Point(pt1.X + maxX + 100, pt1.Y);
+
+			var positions = new List<SpaceUnitAngle>();
+
+			foreach (var spaceUnit in observatory.Space.GetFlat().Where(c => c.IsVisible))
+			{
+				var sup = spaceUnit.Position;
+				var pt2 = new Point(Math.Abs(sup.X), Math.Abs(sup.Y));
+				var angle = GetAngle(pt1, pt2, pt3);
+				var quad = -1;
+
+				if (sup.X >= pt1.X && sup.Y < pt1.Y)
+					quad = 0;
+				else if (sup.X > pt1.X && sup.Y >= pt1.Y)
+				{
+					quad = 1;
+					angle = -angle;
+				}
+				else if (sup.X <= pt1.X && sup.Y > pt1.Y)
+				{
+					quad = 2;
+					angle = -angle;
+				}
+				else if (sup.X <= pt1.X && sup.Y <= pt1.Y)
+					quad = 3;
+				else
+					throw new Exception("Missing param");
+
+				positions.Add(new SpaceUnitAngle
+							  {
+								  SpaceUnit = spaceUnit,
+								  Angle = angle,
+								  Quadrant = quad
+							  });
+			}
+
+			positions = positions.OrderBy(c => c.Quadrant)
+								 .ThenByDescending(c => c.Angle)
+								 .ToList();
+
+			var p199 = positions[199];
+
+			return p199.SpaceUnit.Position.X * 100 + p199.SpaceUnit.Position.Y;
 		}
 
 		private int? LCM(int a, int b)
@@ -136,6 +217,13 @@ namespace Solver.Algorithms
 					return smallNr;
 				smallNr--;
 			}
+		}
+
+		public class SpaceUnitAngle
+		{
+			public double Angle { get; set; }
+			public int Quadrant { get; set; }
+			public SpaceUnit SpaceUnit { get; set; }
 		}
 	}
 }
