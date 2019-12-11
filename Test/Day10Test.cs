@@ -169,7 +169,7 @@ namespace Test
 
 			solution.Space.ToBitmap(c => c.Position == solution.Location ? 255 : c.IsVisible ? 100 : c.ContainsAsteroid ? 50 : 0).Save(Path.Combine(EnvironmentConstants.OutputPath, $"day10/star1_{solution.Location.X},{solution.Location.Y}.bmp"));
 
-			Assert.AreEqual(269, solution);
+			Assert.AreEqual(269, solution.TotalVisibleAsteroids);
 		}
 
 		static int LengthSquare(Point p1, Point p2)
@@ -233,6 +233,7 @@ namespace Test
 		[TestCase("9", 7, 3, 0, 100)]
 		public void Example2_1(string num, int p2X, int p2Y, int p3X, int p3Y)
 		{
+			Console.WriteLine(num);
 			PrintAngle(new Point(0, 0), new Point(p2X, p2Y), new Point(p3X, p3Y));
 			Assert.Pass();
 		}
@@ -252,11 +253,11 @@ namespace Test
 		//[TestCase("7", -1, 7, 0, 100)]
 		//[TestCase("8", -1, 2, 0, 100)]
 		//[TestCase("9", -1, -4, 0, 100)]
-
 		[TestCase("6", 1, 8, 0, 100)]
 		[TestCase("7", 1, 7, 0, 100)]
 		[TestCase("8", 1, 2, 0, 100)]
 
+		//[TestCase("9", -1, -4, 0, 100)]
 		[TestCase("9", 1, 4, 0, 100)]
 		public void Example2_2(string num, int p2X, int p2Y, int p3X, int p3Y)
 		{
@@ -270,10 +271,11 @@ namespace Test
 		//34...7...........
 		//..2.....X....##..
 		//..1..............
-		//[TestCase("1", -6, -1, 0, -100)]
-		[TestCase("1", 6, 1, 0, 100)]
-		
+		//[TestCase("1", -6, -1, 0, 100)]
 		//[TestCase("2", -6, 0, 0,  100)]
+		[TestCase("1", 6, 1, 0, 100)]
+		[TestCase("2", 6, 0, 0, 100)]
+
 		//[TestCase("3", -8, 1, 0,  100)]
 		//[TestCase("4", -7, 1, 0,  100)]
 		//[TestCase("5", -8, 2, 0,  100)]
@@ -281,19 +283,53 @@ namespace Test
 		//[TestCase("7", -3, 1, 0,  100)]
 		//[TestCase("8", -7, 3, 0,  100)]
 		//[TestCase("9", -3, 2, 0,  100)]
-		[TestCase("2", 6, 0, 0,  100)]
-		[TestCase("3", 8, 1, 0,  100)]
-		[TestCase("4", 7, 1, 0,  100)]
-		[TestCase("5", 8, 2, 0,  100)]
-		[TestCase("6", 7, 2, 0,  100)]
-		[TestCase("7", 3, 1, 0,  100)]
-		[TestCase("8", 7, 3, 0,  100)]
-		[TestCase("9", 3, 2, 0,  100)]
+		[TestCase("3", 8, 1, 0, 100)]
+		[TestCase("4", 7, 1, 0, 100)]
+		[TestCase("5", 8, 2, 0, 100)]
+		[TestCase("6", 7, 2, 0, 100)]
+		[TestCase("7", 3, 1, 0, 100)]
+		[TestCase("8", 7, 3, 0, 100)]
+		[TestCase("9", 3, 2, 0, 100)]
 		public void Example2_3(string num, int p2X, int p2Y, int p3X, int p3Y)
 		{
 			Console.WriteLine(num);
 			PrintAngle(new Point(0, 0), new Point(p2X, p2Y), new Point(p3X, p3Y));
 			Assert.Pass();
+		}
+
+		[Test]
+		public void Example2_4()
+		{
+			var inputStr = new[]
+						   {
+							   ".#..##.###...#######",
+							   "##.############..##.",
+							   ".#.######.########.#",
+							   ".###.#######.####.#.",
+							   "#####.##.#.##.###.##",
+							   "..#####..#.#########",
+							   "####################",
+							   "#.####....###.#.#.##",
+							   "##.#################",
+							   "#####.##.###..####..",
+							   "..######..##.#######",
+							   "####.##.####...##..#",
+							   ".#####..#.######.###",
+							   "##...#.##########...",
+							   "#.##########.#######",
+							   ".####.#.###.###.#.##",
+							   "....##.##.###..#####",
+							   ".#.#.###########.###",
+							   "#.#.#.#####.####.###",
+							   "###.##.####.##.#..##"
+						   };
+
+			var input = _input.Parse(inputStr);
+			var solution = _solver.Star2(input);
+
+			Console.WriteLine(solution);
+			Assert.Pass();
+			Assert.AreEqual(44997, solution);
 		}
 
 		[Test]

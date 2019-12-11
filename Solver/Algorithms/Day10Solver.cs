@@ -115,9 +115,95 @@ namespace Solver.Algorithms
 			return observatories.OrderByDescending(c => c.TotalVisibleAsteroids).First();
 		}
 
+		static int LengthSquare(Point p1, Point p2)
+		{
+			int xDiff = p1.X - p2.X;
+			int yDiff = p1.Y - p2.Y;
+			return xDiff * xDiff + yDiff * yDiff;
+		}
+
+		static double GetAngle(Point A, Point B, Point C)
+		{
+			// Square of lengths be a2, b2, c2 
+			int a2 = LengthSquare(B, C);
+			int b2 = LengthSquare(A, C);
+			int c2 = LengthSquare(A, B);
+
+			// length of sides be a, b, c 
+			float a = (float)Math.Sqrt(a2);
+			float b = (float)Math.Sqrt(b2);
+			float c = (float)Math.Sqrt(c2);
+
+			// From Cosine law 
+			float alpha = (float)Math.Acos((b2 + c2 - a2) /
+										   (2 * b * c));
+			float betta = (float)Math.Acos((a2 + c2 - b2) /
+										   (2 * a * c));
+			float gamma = (float)Math.Acos((a2 + b2 - c2) /
+										   (2 * a * b));
+
+			// Converting to degree 
+			alpha = (float)(alpha * 180 / Math.PI);
+			betta = (float)(betta * 180 / Math.PI);
+			gamma = (float)(gamma * 180 / Math.PI);
+
+			return alpha;
+		}
+
+		public class SpaceUnitAngle
+		{
+			public double Angle { get; set; }
+			public int Quadrant { get; set; }
+			public SpaceUnit SpaceUnit { get; set; }
+		}
+
 		public Observatory Star2(Day10Input input)
 		{
-			throw new NotImplementedException();
+			var observatory = Star1(input);
+
+			var maxX = (int)observatory.Space.Max(c => c.Position.X);
+
+			var pt1 = observatory.Location;
+			var pt3 = new Point(pt1.X + maxX + 100, pt1.Y);
+
+			var positions = new List<SpaceUnitAngle>();
+
+			foreach (var spaceUnit in observatory.Space.GetFlat().Where(c => c.IsVisible))
+			{
+				var sup = spaceUnit.Position;
+				var pt2 = new Point(Math.Abs(sup.X), Math.Abs(sup.Y));
+				var angle = GetAngle(pt1, pt2, pt3);
+				var quad = -1;
+
+				if (sup.X >= pt1.X && sup.Y < pt1.Y)
+					quad = 0;
+				else if (sup.X > pt1.X && sup.Y >= pt1.Y)
+				{
+					quad = 1;
+					angle = -angle;
+				}
+				else if (sup.X <= pt1.X && sup.Y >= pt1.Y)
+				{
+					quad = 2;
+					angle = -angle;
+				}
+				else if (sup.X > pt1.X && sup.Y <= pt1.Y)
+					quad = 3;
+				else
+					continue; //throw new Exception("Missing param");
+
+				positions.Add(new SpaceUnitAngle
+							  {
+								  SpaceUnit = spaceUnit,
+								  Angle = angle,
+								  Quadrant = quad
+							  });
+			}
+
+			positions = positions.OrderBy(c => c.Quadrant)
+								 .ThenByDescending(c => c.Angle)
+								 .ToList();
+			return null;
 		}
 
 		private int? LCM(int a, int b)
