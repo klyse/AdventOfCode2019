@@ -37,7 +37,8 @@ namespace Test
 
 			var solution = _solver.Star1(input);
 
-			solution.Space.ToBitmap(c => c.ContainsAsteroid ? 100 : 0).Save(Path.Combine(EnvironmentConstants.OutputPath, "day10_1.bmp"));
+			solution.Space.ToBitmap(c => c.Position == solution.Location ? 255 : c.IsVisible ? 100 : c.ContainsAsteroid ? 50 : 0).Save(Path.Combine(EnvironmentConstants.OutputPath, $"day10/1_{solution.Location.X},{solution.Location.Y}.bmp"));
+
 
 			Assert.AreEqual(8, solution.TotalVisibleAsteroids);
 			Assert.AreEqual(new Point(3, 4), solution.Location);
@@ -62,8 +63,8 @@ namespace Test
 			var input = _input.Parse(inputStr);
 
 			var solution = _solver.Star1(input);
-
-			solution.Space.ToBitmap(c => c.ContainsAsteroid ? 100 : 0).Save(Path.Combine(EnvironmentConstants.OutputPath, "day10_2.bmp"));
+			
+			solution.Space.ToBitmap(c => c.Position == solution.Location ? 255 : c.IsVisible ? 100 : c.ContainsAsteroid ? 50 : 0).Save(Path.Combine(EnvironmentConstants.OutputPath, $"day10/2_{solution.Location.X},{solution.Location.Y}.bmp"));
 
 			Assert.AreEqual(33, solution.TotalVisibleAsteroids);
 			Assert.AreEqual(new Point(5, 8), solution.Location);
@@ -89,7 +90,7 @@ namespace Test
 
 			var solution = _solver.Star1(input);
 
-			solution.Space.ToBitmap(c => c.ContainsAsteroid ? 100 : 0).Save(Path.Combine(EnvironmentConstants.OutputPath, "day10_3.bmp"));
+			solution.Space.ToBitmap(c => c.Position == solution.Location ? 255 : c.IsVisible ? 100 : c.ContainsAsteroid ? 50 : 0).Save(Path.Combine(EnvironmentConstants.OutputPath, $"day10/3_{solution.Location.X},{solution.Location.Y}.bmp"));
 
 			Assert.AreEqual(new Point(1, 2), solution.Location);
 			Assert.AreEqual(35, solution.TotalVisibleAsteroids);
@@ -115,7 +116,7 @@ namespace Test
 
 			var solution = _solver.Star1(input);
 
-			solution.Space.ToBitmap(c => c.ContainsAsteroid ? 100 : 0).Save(Path.Combine(EnvironmentConstants.OutputPath, "day10_4.bmp"));
+			solution.Space.ToBitmap(c => c.Position == solution.Location ? 255 : c.IsVisible ? 100 : c.ContainsAsteroid ? 50 : 0).Save(Path.Combine(EnvironmentConstants.OutputPath, $"day10/4_{solution.Location.X},{solution.Location.Y}.bmp"));
 
 			Assert.AreEqual(new Point(6, 3), solution.Location);
 			Assert.AreEqual(41, solution.TotalVisibleAsteroids);
@@ -151,7 +152,7 @@ namespace Test
 
 			var solution = _solver.Star1(input);
 
-			solution.Space.ToBitmap(c => c.ContainsAsteroid ? 100 : 0).Save(Path.Combine(EnvironmentConstants.OutputPath, "day10_5.bmp"));
+			solution.Space.ToBitmap(c => c.Position == solution.Location ? 255 : c.IsVisible ? 100 : c.ContainsAsteroid ? 50 : 0).Save(Path.Combine(EnvironmentConstants.OutputPath, $"day10/5_{solution.Location.X},{solution.Location.Y}.bmp"));
 
 			Assert.AreEqual(new Point(11, 13), solution.Location);
 			Assert.AreEqual(210, solution.TotalVisibleAsteroids);
@@ -165,8 +166,10 @@ namespace Test
 			var solution = _solver.Star1(input);
 
 			Console.WriteLine(solution.TotalVisibleAsteroids);
-			Assert.Pass();
-			Assert.AreEqual(2494485073, solution);
+
+			solution.Space.ToBitmap(c => c.Position == solution.Location ? 255 : c.IsVisible ? 100 : c.ContainsAsteroid ? 50 : 0).Save(Path.Combine(EnvironmentConstants.OutputPath, $"day10/star1_{solution.Location.X},{solution.Location.Y}.bmp"));
+
+			Assert.AreEqual(269, solution);
 		}
 
 		//[Test]

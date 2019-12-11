@@ -111,8 +111,6 @@ namespace Solver.Algorithms
 									  TotalVisibleAsteroids = space.GetFlat().Count(c => c.IsVisible) - 1
 								  };
 				observatories.Add(observatory);
-
-				observatory.Space.ToBitmap(c => c.Position == observatory.Location ? 255 : c.IsVisible ? 100 : c.ContainsAsteroid ? 50 : 0).Save(Path.Combine(EnvironmentConstants.OutputPath, $"day10/{j},{i}.bmp"));
 			}
 
 			return observatories.OrderByDescending(c => c.TotalVisibleAsteroids).First();
