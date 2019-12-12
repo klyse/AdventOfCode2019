@@ -1,10 +1,11 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Solver.Base;
 
 namespace Solver.Model
 {
-	public class Moon
+	public class Moon : ICloneable
 	{
 		public Point3 Position { get; set; }
 		public Point3 Vector { get; set; }
@@ -24,6 +25,20 @@ namespace Solver.Model
 			Position.X += Vector.X;
 			Position.Y += Vector.Y;
 			Position.Z += Vector.Z;
+		}
+
+		public object Clone()
+		{
+			return new Moon
+				   {
+					   Position = (Point3)Position.Clone()
+				   };
+		}
+
+		
+		public override string ToString()
+		{
+			return $"{Position}";//{Vector}";
 		}
 	}
 
@@ -49,9 +64,10 @@ namespace Solver.Model
 						  .ToList();
 			return this;
 		}
+
 	}
 
-	public class Point3
+	public class Point3 : IEquatable<Point3>, ICloneable
 	{
 		public int X { get; set; }
 		public int Y { get; set; }
@@ -66,7 +82,39 @@ namespace Solver.Model
 
 		public override string ToString()
 		{
-			return $"x={X} y={Y} z={Z}";
+			//return $"x={X.ToString().PadLeft(4)} y={Y.ToString().PadLeft(4)} z={Z.ToString().PadLeft(4)}";
+			return $"{X};{Y};{Z};";
+		}
+
+		public object Clone()
+		{
+			return new Point3(X, Y, Z);
+		}
+
+		public bool Equals(Point3 other)
+		{
+			if (ReferenceEquals(null, other)) return false;
+			if (ReferenceEquals(this, other)) return true;
+			return X == other.X && Y == other.Y && Z == other.Z;
+		}
+
+		public override bool Equals(object obj)
+		{
+			if (ReferenceEquals(null, obj)) return false;
+			if (ReferenceEquals(this, obj)) return true;
+			if (obj.GetType() != this.GetType()) return false;
+			return Equals((Point3)obj);
+		}
+
+		public override int GetHashCode()
+		{
+			unchecked
+			{
+				var hashCode = X;
+				hashCode = (hashCode * 397) ^ Y;
+				hashCode = (hashCode * 397) ^ Z;
+				return hashCode;
+			}
 		}
 	}
 }
