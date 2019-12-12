@@ -20,16 +20,41 @@ namespace Test
 		}
 
 		[Test]
-		[TestCase("")]
-		public void Example1(string inp1)
+		public void Example1_1()
 		{
-			var inputStr = new[] { inp1 };
+			var inputStr = new[]
+						   {
+							   "<x=-1, y=0, z=2>",
+							   "<x=2, y=-10, z=-7>",
+							   "<x=4, y=-8, z=8>",
+							   "<x=3, y=5, z=-1>"
+						   };
 			var input = _input.Parse(inputStr);
+			input.Steps = 10;
 
 			var solution = _solver.Star1(input);
 
 			Console.WriteLine(solution);
-			Assert.Pass();
+			Assert.AreEqual(179, solution);
+		}
+
+		[Test]
+		public void Example1_2()
+		{
+			var inputStr = new[]
+						   {
+							   "<x=-8, y=-10, z=0>",
+							   "<x=5, y=5, z=10>",
+							   "<x=2, y=-7, z=3>",
+							   "<x=9, y=-8, z=-3>"
+						   };
+			var input = _input.Parse(inputStr);
+			input.Steps = 100;
+
+			var solution = _solver.Star1(input);
+
+			Console.WriteLine(solution);
+			Assert.AreEqual(1940, solution);
 		}
 
 		[Test]
@@ -37,11 +62,11 @@ namespace Test
 		{
 			var fileInput = File.Read();
 			var input = _input.Parse(fileInput);
+			input.Steps = 1000;
 			var solution = _solver.Star1(input);
 
 			Console.WriteLine(solution);
-			Assert.Pass();
-			Assert.AreEqual("1620", solution);
+			Assert.AreEqual(7687, solution);
 		}
 
 		[Test]
