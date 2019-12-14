@@ -20,19 +20,6 @@ namespace Test
 		}
 
 		[Test]
-		[TestCase("", ExpectedResult = 0)]
-		public int Example1(string inp1)
-		{
-			var inputStr = new[] { inp1 };
-			var input = _input.Parse(inputStr);
-
-			var solution = _solver.Star1(input);
-
-			Console.WriteLine(solution);
-			return solution;
-		}
-
-		[Test]
 		public void Star1()
 		{
 			var fileInput = File.Read();
@@ -40,8 +27,7 @@ namespace Test
 			var solution = _solver.Star1(input);
 
 			Console.WriteLine(solution);
-			Assert.Pass();
-			Assert.AreEqual(199988, solution);
+			Assert.AreEqual(205, solution);
 		}
 
 		[Test]
