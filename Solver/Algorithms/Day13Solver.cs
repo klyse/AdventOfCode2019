@@ -219,7 +219,13 @@ namespace Solver.Algorithms
 
 		public int Star2(Day13Input input)
 		{
-			throw new NotImplementedException();
+			var computer = new IntComputerV13();
+			computer.Commands = input.Commands;
+			computer.Commands[0] = 2;
+
+			computer.Run(-1);
+
+			return -1;
 		}
 	}
 }
