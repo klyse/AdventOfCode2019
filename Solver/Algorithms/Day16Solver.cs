@@ -7,10 +7,10 @@ namespace Solver.Algorithms
 {
 	public class Day16Solver : ISolver<string, Day16Input>
 	{
-		public int[,] CalculatePattern(Day16Input input)
+		public int[,] CalculatePattern(int[] numbers, int[] basePattern)
 		{
-			var pattern = new int[input.Numbers.Length, input.Numbers.Length];
-			for (var i = 0; i < input.Numbers.Length; ++i)
+			var pattern = new int[numbers.Length, numbers.Length];
+			for (var i = 0; i < numbers.Length; ++i)
 			{
 				var cnt = 0;
 				var p = 0;
@@ -19,16 +19,16 @@ namespace Solver.Algorithms
 				{
 					for (var r = 0; r <= i; r++)
 					{
-						pattern[i, cnt] = input.BasePattern[p % 4];
+						pattern[i, cnt] = basePattern[p % 4];
 						if (!first)
 							cnt++;
 						first = false;
-						if (cnt >= input.Numbers.Length)
+						if (cnt >= numbers.Length)
 							break;
 					}
 
 					p++;
-				} while (cnt < input.Numbers.Length);
+				} while (cnt < numbers.Length);
 			}
 
 			return pattern;
@@ -53,18 +53,34 @@ namespace Solver.Algorithms
 
 		public string Star1(Day16Input input)
 		{
-			var pattern = CalculatePattern(input);
+			var pattern = CalculatePattern(input.Numbers, input.BasePattern);
 
 			var numbers = input.Numbers;
 			for (var i = 0; i < input.Iterations; i++)
 				numbers = Iterate(numbers, pattern);
 
-			return new string(string.Join(string.Empty,numbers).Take(8).ToArray());
+			return new string(string.Join(string.Empty, numbers).Take(8).ToArray());
 		}
 
 		public string Star2(Day16Input input)
 		{
-			throw new NotImplementedException();
+			var numbers = input.Numbers;
+			var pattern = CalculatePattern(numbers, input.BasePattern);
+
+			for (var i = 0; i < input.Iterations; i++)
+				numbers = Iterate(numbers, pattern);
+
+			
+			var extNums = new int[input.Numbers.Length * 10000];
+			for (int i = 0; i < 10000; i++)
+			{
+				numbers.CopyTo(extNums, i * input.Numbers.Length);
+			}
+
+			var numString = string.Join(string.Empty, extNums);
+			var offset = int.Parse(string.Join(string.Empty, numString.Take(7)));
+
+			return new string(numString.Skip(offset).Take(8).ToArray());
 		}
 	}
 }

@@ -63,11 +63,14 @@ namespace Test
 		}
 
 		[Test]
-		[TestCase("", ExpectedResult = 0)]
+		[TestCase("03036732577212944063491565474664", ExpectedResult = "84462026")]
+		[TestCase("02935109699940807407585447034323", ExpectedResult = "78725270")]
+		[TestCase("03081770884921959731165446850517", ExpectedResult = "53553731")]
 		public string Example2(string inp1)
 		{
 			var inputStr = new[] { inp1 };
 			var input = _input.Parse(inputStr);
+			input.Iterations = 100;
 
 			var solution = _solver.Star2(input);
 
@@ -80,6 +83,7 @@ namespace Test
 		{
 			var fileInput = File.Read();
 			var input = _input.Parse(fileInput);
+			input.Iterations = 100;
 
 			var solution = _solver.Star2(input);
 
