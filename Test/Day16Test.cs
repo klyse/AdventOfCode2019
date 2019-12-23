@@ -20,11 +20,28 @@ namespace Test
 		}
 
 		[Test]
-		[TestCase("", ExpectedResult = 0)]
-		public int Example1(string inp1)
+		[TestCase("12345678", ExpectedResult = "01029498")]
+		public string Example1_1(string inp1)
 		{
 			var inputStr = new[] { inp1 };
 			var input = _input.Parse(inputStr);
+			input.Iterations = 4;
+
+			var solution = _solver.Star1(input);
+
+			Console.WriteLine(solution);
+			return solution;
+		}
+
+		[Test]
+		[TestCase("80871224585914546619083218645595", ExpectedResult = "24176176")]
+		[TestCase("19617804207202209144916044189917", ExpectedResult = "73745418")]
+		[TestCase("69317163492948606335995924319873", ExpectedResult = "52432133")]
+		public string Example1_2(string inp1)
+		{
+			var inputStr = new[] { inp1 };
+			var input = _input.Parse(inputStr);
+			input.Iterations = 100;
 
 			var solution = _solver.Star1(input);
 
@@ -37,15 +54,17 @@ namespace Test
 		{
 			var fileInput = File.Read();
 			var input = _input.Parse(fileInput);
+			input.Iterations = 100;
+
 			var solution = _solver.Star1(input);
 
 			Console.WriteLine(solution);
-			Assert.AreEqual(205, solution);
+			Assert.AreEqual("44098263", solution);
 		}
 
 		[Test]
 		[TestCase("", ExpectedResult = 0)]
-		public int Example2(string inp1)
+		public string Example2(string inp1)
 		{
 			var inputStr = new[] { inp1 };
 			var input = _input.Parse(inputStr);
