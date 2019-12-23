@@ -38,7 +38,7 @@ namespace Test
 			var solution = _solver.Star2(input);
 
 			Console.WriteLine(solution);
-			Assert.AreEqual("2415", solution);
+			Assert.AreEqual("BFPUZUPC", solution);
 		}
 	}
 }
