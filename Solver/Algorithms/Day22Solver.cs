@@ -22,7 +22,7 @@ namespace Solver.Algorithms
 		{
 			var cards = Shuffle(input);
 
-			return cards.ElementAt(2019);
+			return Array.FindIndex(cards.ToArray(), c => c == 2019);
 		}
 
 		public int Star2(Day22Input input)

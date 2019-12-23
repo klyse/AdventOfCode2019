@@ -1,18 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using Solver.Base;
 
 namespace Solver.Model
 {
-	public enum ShuffleTypes
-	{
-		DealWithIncrement,
-		DealIntoNewStack,
-		Cut
-	}
-
 	public interface IShuffle
 	{
 		IEnumerable<int> Shuffle(IEnumerable<int> cards);
@@ -36,8 +28,11 @@ namespace Solver.Model
 				cardsArray[index] = q.Dequeue();
 
 				index += Increment;
-				if (index > cardsArray.Length)
-					index = Array.FindIndex(cardsArray, c => c != -1) + index - cardsArray.Length;
+				if (index >= cardsArray.Length)
+				{
+					var delta = index - cardsArray.Length;
+					index = delta;
+				}
 			}
 
 			if (cardsArray.Any(c => c == -1))

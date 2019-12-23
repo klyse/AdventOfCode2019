@@ -149,13 +149,12 @@ namespace Test
 		public void Star1()
 		{
 			var fileInput = File.Read();
-			_input.NumberOfCards = 10006;
+			_input.NumberOfCards = 10007;
 			var input = _input.Parse(fileInput);
 			var solution = _solver.Star1(input);
 
 			Console.WriteLine(solution);
-			Assert.Pass();
-			Assert.AreEqual(399063, solution);
+			Assert.AreEqual(2604, solution);
 		}
 
 		[Test]
