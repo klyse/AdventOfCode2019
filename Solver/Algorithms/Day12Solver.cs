@@ -5,9 +5,9 @@ using Solver.Model;
 
 namespace Solver.Algorithms
 {
-	public class Day12Solver : ISolver<int, Day12Input>
+	public class Day12Solver : ISolver<long, Day12Input>
 	{
-		public int Star1(Day12Input input)
+		public long Star1(Day12Input input)
 		{
 			for (var i = 0; i < input.Steps; ++i)
 			{
@@ -29,11 +29,12 @@ namespace Solver.Algorithms
 			return sum;
 		}
 
-		public int Star2(Day12Input input)
+		public long Star2(Day12Input input)
 		{
 			var startPos = input.Moons.Select(c => (Moon)c.Clone()).ToList();
+			var hCode = HashCode.Combine(startPos[0], startPos[1], startPos[2], startPos[3]);
 
-			var step = 1;
+			long step = 0;
 			while (true)
 			{
 				for (var m1 = 0; m1 < input.Moons.Count; m1++)
@@ -48,27 +49,15 @@ namespace Solver.Algorithms
 				foreach (var moon in input.Moons) moon.Move();
 
 				step++;
-
-				var firstFalse = false;
-				for (var m = 0; m < input.Moons.Count; m++)
-					if (!startPos[m].Position.Equals(input.Moons[m].Position))
-					{
-						firstFalse = true;
-						break;
-					}
-
-				if (step % 1 == 0)
+				if (step % 1000000 == 0)
 				{
-					Console.Write($"{step};");
-					for (var i = 0; i < input.Moons.Count; i++)
-						//Console.WriteLine($"{step.ToString().PadLeft(8)}: {input.Moons[i]}");
-						Console.Write($"{input.Moons[i]}");
-
-					Console.WriteLine();
+					Console.WriteLine($"{step / 1000000}M");
 				}
 
-				if (firstFalse)
+				var curHCode = HashCode.Combine(input.Moons[0], input.Moons[1], input.Moons[2], input.Moons[3]);
+				if (curHCode != hCode)
 					continue;
+
 
 				return step;
 			}

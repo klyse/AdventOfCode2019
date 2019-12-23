@@ -31,14 +31,16 @@ namespace Solver.Model
 		{
 			return new Moon
 				   {
-					   Position = (Point3)Position.Clone()
+					   Position = (Point3)Position.Clone(),
+					   Vector = (Point3)Vector.Clone()
 				   };
 		}
 
-		
-		public override string ToString()
+		public override int GetHashCode()
 		{
-			return $"{Position}";//{Vector}";
+			// ReSharper disable NonReadonlyMemberInGetHashCode
+			return HashCode.Combine(Position, Vector);
+			// ReSharper restore NonReadonlyMemberInGetHashCode
 		}
 	}
 
@@ -64,7 +66,6 @@ namespace Solver.Model
 						  .ToList();
 			return this;
 		}
-
 	}
 
 	public class Point3 : IEquatable<Point3>, ICloneable
