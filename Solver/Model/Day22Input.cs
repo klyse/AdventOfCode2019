@@ -85,30 +85,20 @@ namespace Solver.Model
 			var shuffleRules = new List<IShuffle>();
 
 			foreach (var s in values)
-			{
 				if (s.StartsWith("cut"))
-				{
 					shuffleRules.Add(new CutShuffle
 									 {
 										 Cut = int.Parse(s.Split(' ').ElementAt(1))
 									 });
-				}
 				else if (s.StartsWith("deal with increment"))
-				{
 					shuffleRules.Add(new DealWithIncrementShuffle
 									 {
 										 Increment = int.Parse(s.Split(' ').ElementAt(3))
 									 });
-				}
 				else if (s.StartsWith("deal into new stack"))
-				{
 					shuffleRules.Add(new DealIntoNewStackShuffle());
-				}
 				else
-				{
 					throw new Exception("What happened??");
-				}
-			}
 
 			ShuffleRules = shuffleRules;
 

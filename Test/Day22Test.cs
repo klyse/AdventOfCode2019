@@ -59,7 +59,7 @@ namespace Test
 		[Test]
 		public void DealWithIncrementShuffleTest()
 		{
-			var shuffle = new DealWithIncrementShuffle()
+			var shuffle = new DealWithIncrementShuffle
 						  {
 							  Increment = 3
 						  };
