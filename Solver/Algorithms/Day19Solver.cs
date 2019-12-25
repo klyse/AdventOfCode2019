@@ -1,8 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
+using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
+using NeoMatrix;
 using Solver.Base;
 using Solver.Model;
+using Region = NeoMatrix.Region;
 
 namespace Solver.Algorithms
 {
@@ -217,12 +222,55 @@ namespace Solver.Algorithms
 				if (computer.Run(new long[] { i, j }) == 1)
 					totalCnt++;
 			}
+
 			return totalCnt;
 		}
 
 		public int Star2(Day19Input input)
 		{
-			throw new NotImplementedException();
+			var mat = new Matrix<bool>(input.GridSize, input.GridSize);
+
+			var gridSizeToFind = 100;
+
+			var tuples = new List<Tuple<int, int>>();
+			for (var i = 350; i < input.GridSize; ++i)
+			for (var j = 900; j < input.GridSize; ++j)
+				tuples.Add(new Tuple<int, int>(i, j));
+
+			Parallel.ForEach(tuples, tuple =>
+									 {
+										 var computer = new IntComputerV19();
+										 computer.Commands = input.Commands;
+										 var (x, y) = tuple;
+										 mat[x, y] = computer.Run(new long[] { x, y }) == 1;
+									 });
+
+			mat.ToBitmap(c => c ? 1 : 0).Save(Path.Combine(EnvironmentConstants.OutputPath, "day19.bmp"));
+			
+			for (var row = 0; row <= mat.Rows - gridSizeToFind-1; ++row)
+			for (var col = 0; col <= mat.Columns - gridSizeToFind -1; ++col)
+			{
+				if (!mat[row, col + gridSizeToFind] ||
+					!mat[row + gridSizeToFind, col]) continue;
+
+				mat.ToBitmap((r, c, v) =>
+							 {
+								 if (c == col && r == row)
+									 return Color.FromArgb(100, Color.Green);
+
+								 if (c == col || r == row ||
+									 c == col + gridSizeToFind || r == row + gridSizeToFind)
+									 return Color.FromArgb(100, Color.Red);
+
+								 if (v)
+									 return Color.Black;
+								 return Color.White;
+							 }).Save(Path.Combine(EnvironmentConstants.OutputPath, $"day19-highlighted-{col},{row}.bmp"));
+
+				return col * 10000 + row;
+			}
+
+			throw new Exception("Not Found");
 		}
 	}
 }
