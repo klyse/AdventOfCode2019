@@ -37,24 +37,12 @@ namespace Test
 		{
 			var fileInput = File.Read();
 			var input = _input.Parse(fileInput);
-
+			_input.GridSize = 1100;
 			var solution = _solver.Star2(input);
 
 			Console.WriteLine(solution);
 			Assert.Pass();
 			Assert.AreEqual(9240, solution);
-		}
-
-		[Test]
-		public void Example2()
-		{
-			var fileInput = File.Read();
-			var input = _input.Parse(fileInput);
-			_input.GridSize = 1100;
-			var solution = _solver.Star2(input);
-
-			Console.WriteLine(solution);
-			Assert.AreEqual(166, solution);
 		}
 	}
 }

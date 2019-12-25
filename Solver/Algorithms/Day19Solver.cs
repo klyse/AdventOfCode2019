@@ -230,7 +230,7 @@ namespace Solver.Algorithms
 		{
 			var mat = new Matrix<bool>(input.GridSize, input.GridSize);
 
-			var gridSizeToFind = 100;
+			var gridSizeToFind = 99;
 
 			var tuples = new List<Tuple<int, int>>();
 			for (var i = 350; i < input.GridSize; ++i)
@@ -246,9 +246,9 @@ namespace Solver.Algorithms
 									 });
 
 			mat.ToBitmap(c => c ? 1 : 0).Save(Path.Combine(EnvironmentConstants.OutputPath, "day19.bmp"));
-			
-			for (var row = 0; row <= mat.Rows - gridSizeToFind-1; ++row)
-			for (var col = 0; col <= mat.Columns - gridSizeToFind -1; ++col)
+
+			for (var row = 0; row <= mat.Rows - gridSizeToFind - 1; ++row)
+			for (var col = 0; col <= mat.Columns - gridSizeToFind - 1; ++col)
 			{
 				if (!mat[row, col + gridSizeToFind] ||
 					!mat[row + gridSizeToFind, col]) continue;
@@ -267,7 +267,7 @@ namespace Solver.Algorithms
 								 return Color.White;
 							 }).Save(Path.Combine(EnvironmentConstants.OutputPath, $"day19-highlighted-{col},{row}.bmp"));
 
-				return col * 10000 + row;
+				return row * 10000 + col; // row / column is switched... idk why...
 			}
 
 			throw new Exception("Not Found");
