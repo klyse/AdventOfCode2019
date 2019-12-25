@@ -34,6 +34,7 @@ namespace Test
 			var input = _input.Parse(inputStr);
 
 			var solution = _solver.Star1(input);
+			Console.WriteLine(solution);
 			Assert.AreEqual(2129920, solution);
 		}
 
@@ -45,8 +46,7 @@ namespace Test
 			var solution = _solver.Star1(input);
 
 			Console.WriteLine(solution);
-			Assert.Pass();
-			Assert.AreEqual(2604, solution);
+			Assert.AreEqual(32505887, solution);
 		}
 
 		[Test]
