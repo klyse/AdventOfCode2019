@@ -37,7 +37,7 @@ namespace Test
 		{
 			var fileInput = File.Read();
 			var input = _input.Parse(fileInput);
-
+			_input.GridSize = 1100;
 			var solution = _solver.Star2(input);
 
 			Console.WriteLine(solution);
