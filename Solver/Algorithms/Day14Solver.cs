@@ -33,13 +33,10 @@ namespace Solver.Algorithms
 			var maxOre = 1e12;
 
 			var fuelCnt = Make("FUEL");
-			long available = (long)maxOre - _oreCnt;
-			var step = (int)(available / _oreCnt);
 			while (true)
 			{
+				var step = (int)(maxOre / _oreCnt);
 				fuelCnt += Make("FUEL", step);
-
-				step = step / 2;
 
 				if (_oreCnt > maxOre)
 					Debugger.Break();
@@ -48,18 +45,18 @@ namespace Solver.Algorithms
 
 		private void Need(ChemicalDependency dep, int count)
 		{
-			if (_producedChemicals[dep.Name] >= dep.Count)
-				_producedChemicals[dep.Name] -= dep.Count;
+			if (_producedChemicals[dep.Name] >= dep.Count * count)
+				_producedChemicals[dep.Name] -= dep.Count * count;
 			else
 				while (true)
 				{
-					var cnt =  Math.Ceiling(count / (double)dep.Count);
+					var cnt = Math.Ceiling(count / (double)dep.Count);
 					var madeCnt = Make(dep.Name, (int)cnt);
 
 					_producedChemicals[dep.Name] += madeCnt;
-					if (_producedChemicals[dep.Name] >= dep.Count)
+					if (_producedChemicals[dep.Name] >= dep.Count * count)
 					{
-						_producedChemicals[dep.Name] -= dep.Count;
+						_producedChemicals[dep.Name] -= dep.Count * count;
 						break;
 					}
 				}
