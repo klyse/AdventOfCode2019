@@ -9,15 +9,15 @@ namespace Solver.Algorithms
 {
 	public class Day14Solver : ISolver<int, Day14Input>
 	{
-		private Day14Input _day14In;
 		private long _oreCnt;
 		private Dictionary<string, long> _producedChemicals;
+		Dictionary<string, Chemical> _recipes;
 
 		public int Star1(Day14Input input)
 		{
-			_day14In = input;
+			_recipes = input.Recipes.ToDictionary(c => c.Name, c => c);
 
-			_producedChemicals = _day14In.Recipes.ToDictionary(c => c.Name, c => (long)0);
+			_producedChemicals = input.Recipes.ToDictionary(c => c.Name, c => (long)0);
 
 			Make("FUEL");
 
@@ -26,9 +26,8 @@ namespace Solver.Algorithms
 
 		public int Star2(Day14Input input)
 		{
-			_day14In = input;
-
-			_producedChemicals = _day14In.Recipes.ToDictionary(c => c.Name, c => (long)0);
+			_recipes = input.Recipes.ToDictionary(c => c.Name, c => c);
+			_producedChemicals = input.Recipes.ToDictionary(c => c.Name, c => (long)0);
 
 			var iterations = 0;
 			while (true)
@@ -43,19 +42,19 @@ namespace Solver.Algorithms
 			}
 		}
 
-		private void Need(string name, int count)
+		private void Need(ChemicalDependency dep)
 		{
-			if (_producedChemicals[name] >= count)
-				_producedChemicals[name] -= count;
+			if (_producedChemicals[dep.Name] >= dep.Count)
+				_producedChemicals[dep.Name] -= dep.Count;
 			else
 				while (true)
 				{
-					var madeCnt = Make(name);
+					var madeCnt = Make(dep.Name);
 
-					_producedChemicals[name] += madeCnt;
-					if (_producedChemicals[name] >= count)
+					_producedChemicals[dep.Name] += madeCnt;
+					if (_producedChemicals[dep.Name] >= dep.Count)
 					{
-						_producedChemicals[name] -= count;
+						_producedChemicals[dep.Name] -= dep.Count;
 						break;
 					}
 				}
@@ -63,13 +62,13 @@ namespace Solver.Algorithms
 
 		private int Make(string chemName)
 		{
-			var chemical = _day14In.Recipes.First(c => c.Name == chemName);
+			var chemical = _recipes[chemName];
 
 			foreach (var chemicalDependency in chemical.Dependencies)
 				if (chemicalDependency.Name == "ORE")
 					_oreCnt += chemicalDependency.Count;
 				else
-					Need(chemicalDependency.Name, chemicalDependency.Count);
+					Need(chemicalDependency);
 
 			return chemical.ResultCount;
 		}
