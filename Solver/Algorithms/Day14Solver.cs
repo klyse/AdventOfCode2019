@@ -38,12 +38,9 @@ namespace Solver.Algorithms
 
 				if (_producedChemicals.All(c => c.Value == 0))
 				{
-					return (int)((1e12 / (double)_oreCnt) * iterations);
+					return (int)((1e12 / _oreCnt) * iterations);
 				}
 			}
-
-
-			return 0;
 		}
 
 		private void Need(string name, int count)
