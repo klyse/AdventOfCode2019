@@ -30,26 +30,31 @@ namespace Solver.Algorithms
 			_producedChemicals = input.Recipes.ToDictionary(c => c.Name, c => (long)0);
 
 			var iterations = 0;
+			var maxOre = 1e12;
+
+			var fuelCnt = Make("FUEL");
+			long available = (long)maxOre - _oreCnt;
+			var step = (int)(available / _oreCnt);
 			while (true)
 			{
-				iterations++;
-				Make("FUEL");
+				fuelCnt += Make("FUEL", step);
 
-				if (_producedChemicals.All(c => c.Value == 0))
-				{
-					return (int)((1e12 / _oreCnt) * iterations);
-				}
+				step = step / 2;
+
+				if (_oreCnt > maxOre)
+					Debugger.Break();
 			}
 		}
 
-		private void Need(ChemicalDependency dep)
+		private void Need(ChemicalDependency dep, int count)
 		{
 			if (_producedChemicals[dep.Name] >= dep.Count)
 				_producedChemicals[dep.Name] -= dep.Count;
 			else
 				while (true)
 				{
-					var madeCnt = Make(dep.Name);
+					var cnt =  Math.Ceiling(count / (double)dep.Count);
+					var madeCnt = Make(dep.Name, (int)cnt);
 
 					_producedChemicals[dep.Name] += madeCnt;
 					if (_producedChemicals[dep.Name] >= dep.Count)
@@ -60,17 +65,17 @@ namespace Solver.Algorithms
 				}
 		}
 
-		private int Make(string chemName)
+		private int Make(string chemName, int count = 1)
 		{
 			var chemical = _recipes[chemName];
 
 			foreach (var chemicalDependency in chemical.Dependencies)
 				if (chemicalDependency.Name == "ORE")
-					_oreCnt += chemicalDependency.Count;
+					_oreCnt += chemicalDependency.Count * count;
 				else
-					Need(chemicalDependency);
+					Need(chemicalDependency, count);
 
-			return chemical.ResultCount;
+			return chemical.ResultCount * count;
 		}
 	}
 }
